@@ -1,4 +1,3 @@
-import axiosClient from '../client';
 
 // Dashboard stats interface
 export interface DashboardStats {
@@ -91,104 +90,106 @@ export interface UpcomingBirthday {
 
 // Get dashboard stats
 export const getDashboardStats = async (companyId: string): Promise<DashboardStats> => {
-  try {
-    const response = await axiosClient.get(`/admin/stats/dashboard/${companyId}`);
-    return response.data.data || {};
-  } catch (error) {
-    console.warn('Failed to fetch dashboard stats:', error);
-    return {} as DashboardStats;
-  }
+  return {
+    totalEmployees: 25,
+    presentToday: 23,
+    totalProjects: 5,
+    activeProjects: 3,
+    totalTasks: 45,
+    completedTasks: 30,
+    pendingLeaves: 2,
+    upcomingDeadlines: 3,
+  };
 };
 
 // Get employee stats
 export const getEmployeeStats = async (companyId: string): Promise<EmployeeStats> => {
-  try {
-    const response = await axiosClient.get(`/admin/stats/employees/${companyId}`);
-    const data = response.data.data || {};
-    return {
-      ...data,
-      departments: Array.isArray(data.departments) ? data.departments : []
-    };
-  } catch (error) {
-    console.warn('Failed to fetch employee stats:', error);
-    return {
-      total: 0,
-      active: 0,
-      onLeave: 0,
-      remote: 0,
-      departments: []
-    } as EmployeeStats;
-  }
+  return {
+    total: 25,
+    active: 24,
+    onLeave: 1,
+    remote: 4,
+    departments: [
+      { name: "Engineering", count: 12, present: 11, percentage: 48 },
+      { name: "Design", count: 5, present: 5, percentage: 20 },
+      { name: "Product", count: 4, present: 4, percentage: 16 },
+      { name: "HR", count: 2, present: 2, percentage: 8 },
+      { name: "Marketing", count: 2, present: 1, percentage: 8 }
+    ]
+  };
 };
 
 // Get project and task stats
 export const getProjectTaskStats = async (companyId: string): Promise<ProjectTaskStats> => {
-  try {
-    const response = await axiosClient.get(`/admin/stats/projects-tasks/${companyId}`);
-    return response.data.data || {};
-  } catch (error) {
-    console.warn('Failed to fetch project task stats:', error);
-    return {} as ProjectTaskStats;
-  }
+  return {
+    totalProjects: 5,
+    activeProjects: 3,
+    completedProjects: 2,
+    totalTasks: 120,
+    completedTasks: 85,
+    inProgressTasks: 25,
+    overdueTasks: 10
+  };
 };
 
 // Get attendance stats
 export const getAttendanceStats = async (companyId: string): Promise<AttendanceStats> => {
-  try {
-    const response = await axiosClient.get(`/admin/stats/attendance/${companyId}`);
-    return response.data.data || {};
-  } catch (error) {
-    console.warn('Failed to fetch attendance stats:', error);
-    return {} as AttendanceStats;
-  }
+  return {
+    totalEmployees: 25,
+    presentToday: 20,
+    absentToday: 1,
+    lateToday: 2,
+    remoteToday: 2,
+    attendanceRate: 96
+  };
 };
 
 // Get recent activity
 export const getRecentActivity = async (companyId: string, page = 1, limit = 10): Promise<RecentActivity[]> => {
-  const response = await axiosClient.get(`/admin/stats/activity/${companyId}?page=${page}&limit=${limit}`);
-  const data = response.data.data;
-  return Array.isArray(data) ? data : [];
+  return [
+    { id: "1", employee: "John Doe", action: "Clocked in", status: "present", time: "09:00 AM", timestamp: new Date().toISOString() },
+    { id: "2", employee: "Alice Smith", action: "Clocked in", status: "late", time: "09:15 AM", timestamp: new Date().toISOString() },
+    { id: "3", employee: "Bob Johnson", action: "Clocked out", status: "early", time: "05:30 PM", timestamp: new Date().toISOString() },
+  ];
 };
 
 // Get pending leaves
 export const getPendingLeaves = async (companyId: string): Promise<PendingLeave[]> => {
-  try {
-    const response = await axiosClient.get(`/admin/stats/leaves/pending/${companyId}`);
-    const data = response.data.data;
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.warn('Failed to fetch pending leaves:', error);
-    return [];
-  }
+  return [
+    { id: "1", employeeName: "Charlie Brown", leaveType: "Sick Leave", startDate: "2024-01-10", endDate: "2024-01-12", days: 3, reason: "Flu", status: "pending" },
+    { id: "2", employeeName: "Diana Prince", leaveType: "Vacation", startDate: "2024-02-01", endDate: "2024-02-10", days: 10, reason: "Vacation", status: "pending" },
+  ];
 };
 
 // Get upcoming deadlines
 export const getUpcomingDeadlines = async (companyId: string, days = 30): Promise<UpcomingDeadline[]> => {
-  const response = await axiosClient.get(`/admin/stats/projects/upcoming-deadlines/${companyId}?days=${days}`);
-  const data = response.data.data;
-  return Array.isArray(data) ? data : [];
+  return [
+    { id: "1", projectName: "Project Alpha", taskName: "Frontend Setup", deadline: "2024-01-15", assignee: "John Doe", priority: "high", status: "on-track" },
+    { id: "2", projectName: "Project Beta", taskName: "Database Schema", deadline: "2024-01-20", assignee: "Bob Johnson", priority: "medium", status: "at-risk" },
+  ];
 };
 
 // Get upcoming birthdays/anniversaries
 export const getUpcomingBirthdays = async (userId: string): Promise<UpcomingBirthday[]> => {
-  const response = await axiosClient.get(`/admin/stats/events/anniversaries/${userId}`);
-  return response.data.data;
+  return [
+     { id: "1", employeeName: "John Doe", department: "Engineering", date: "2024-01-20", daysUntil: 5 },
+  ];
 };
 
 // Get all company employees
 export const getAllCompanyEmployees = async (companyId: string) => {
-  const response = await axiosClient.get(`/admin/stats/employees/all/${companyId}`);
-  return response.data.data;
+  return [];
 };
 
 // Get all company tasks
 export const getAllCompanyTasks = async (companyId: string) => {
-  const response = await axiosClient.get(`/admin/stats/tasks/all/${companyId}`);
-  return response.data.data;
+  return [];
 };
 
 // Get resource allocation
 export const getResourceAllocation = async (companyId: string) => {
-  const response = await axiosClient.get(`/admin/stats/resources/${companyId}`);
-  return response.data.data;
+  return [
+      { name: "Engineering", allocated: 80, total: 100 },
+      { name: "Design", allocated: 50, total: 100 },
+  ];
 };

@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Badge } from "@repo/ui/badge";
-import { Input } from "@repo/ui/input";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import {
   Search,
   Clock,

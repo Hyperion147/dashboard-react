@@ -1,12 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import apiClient from "../client";
 
-interface ApiResponse<T> {
-  success: boolean;
-  code: number;
-  message: string;
-  data: T;
-}
+import { useQuery } from "@tanstack/react-query";
+import { dummyDepartment } from "@/data/dummy";
 
 export interface Department {
   id: string;
@@ -24,10 +18,11 @@ export const useCompanyDepartments = (companyId: string) => {
   return useQuery({
     queryKey: ["departments", "company", companyId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Department[]>>(`/departments/company/${companyId}`);
-      return response.data.data;
+      // Cast dummyDepartment to Department list (array)
+      return [dummyDepartment] as unknown as Department[];
     },
     enabled: !!companyId,
+    initialData: ([dummyDepartment] as unknown as Department[]),
   });
 };
 
@@ -36,9 +31,9 @@ export const useDepartment = (departmentId: string) => {
   return useQuery({
     queryKey: ["departments", departmentId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Department>>(`/departments/${departmentId}/view`);
-      return response.data.data;
+       return dummyDepartment as unknown as Department;
     },
     enabled: !!departmentId,
+    initialData: (dummyDepartment as unknown as Department),
   });
 };

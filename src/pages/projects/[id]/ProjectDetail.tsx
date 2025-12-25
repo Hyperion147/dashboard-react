@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Skeleton } from "@repo/ui/skeleton";
-import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import {
   AlertCircle,
   ArrowLeft,
@@ -35,8 +35,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
-import { Label } from "@repo/ui/label";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { useProject, useProjectTeams, useAssignTeamToProject, useRemoveTeamFromProject, useUpdateProject } from "@/queries/projects/projectQueries";
 import { useDepartmentTeams } from "@/queries/teams/teamQueries";
 import { useCompanyDepartments } from "@/queries/departments/departmentQueries";

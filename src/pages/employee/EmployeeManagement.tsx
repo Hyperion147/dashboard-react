@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { Search, Mail, Phone, MapPin, Clock, AlertCircle } from "lucide-react";
 import { Link, useParams } from "react-router-dom";

@@ -8,22 +8,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
-import { Button } from "@repo/ui/button";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
-import { Textarea } from "@repo/ui/textarea";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
-import { Calendar } from "@repo/ui/calendar";
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Plus, Loader2, CalendarIcon, AlertCircle } from "lucide-react";
-import { cn } from "@repo/ui/lib";
+import { cn } from "@/lib/utils";
 import { useCreateTask } from "@/queries/tasks/taskQueries";
 import { useProjectTeams } from "@/queries/projects/projectQueries";
 import { useTeamMembers } from "@/queries/teams/teamQueries";

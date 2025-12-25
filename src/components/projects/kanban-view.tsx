@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { Card, CardContent } from "@repo/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import toast from "react-hot-toast";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Avatar, AvatarFallback } from "@repo/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
-import { Label } from "@repo/ui/label";
-import { Input } from "@repo/ui/input";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Plus, MoreHorizontal, MessageSquare, Paperclip } from "lucide-react";
 import {
   DragDropContext,

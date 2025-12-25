@@ -14,7 +14,7 @@ import {
   IconReceipt,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-import { cn } from "@repo/ui/lib";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/utils/toast";
 import { LogoutConfirmDialog } from "./LogoutConfirmDialog";

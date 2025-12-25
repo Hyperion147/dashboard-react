@@ -6,9 +6,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@repo/ui/dialog";
-import { Button } from "@repo/ui/button";
-import { Progress } from "@repo/ui/progress";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 interface LogoutConfirmDialogProps {
   open: boolean;

@@ -1,8 +1,7 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axiosClient from '@/queries/client';
-import { clearAuthData, getStoredAuthData, isTokenExpired } from '@/utils/auth';
+import { createContext, useContext, useState, type ReactNode } from "react";
+import { dummyUser, dummyEmployee } from "@/data/dummy";
 
+// Keeping the interface compatible with existing usage
 interface User {
   id: string;
   email: string;
@@ -59,7 +58,7 @@ interface AuthContextType {
   companyId: string | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (authResponse: { access_token: string; refresh_token: string; user: User; employee: Employee }) => void;
+  login: (authResponse: any) => void;
   logout: () => void;
   refreshAccessToken: () => Promise<string | null>;
   validateToken: () => Promise<boolean>;
@@ -70,197 +69,34 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [employee, setEmployee] = useState<Employee | null>(null);
-  const [companyId, setCompanyId] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  // Always use dummy data
+  const [user] = useState<User | null>(dummyUser as User);
+  // Casting dummyEmployee to the local Employee interface which is slighty different but compatible enough for the UI
+  const [employee] = useState<Employee | null>(
+    dummyEmployee as unknown as Employee
+  );
+  const [companyId] = useState<string | null>(dummyEmployee.company_id);
+  const [token] = useState<string | null>("dummy-token");
+  const [isLoading] = useState(false);
 
-  // Validate current token - simplified version
-  const validateToken = async () => {
-    try {
-      const currentToken = token || localStorage.getItem('adminToken');
-      if (!currentToken) {
-        return false;
-      }
-
-      // Just check if token is expired client-side first
-      if (isTokenExpired(currentToken)) {
-        return false;
-      }
-
-      return true;
-    } catch (error: any) {
-      return false;
-    }
-  };
-
-  // Validate token on dashboard visit - more thorough check
-  const validateTokenOnVisit = async (): Promise<boolean> => {
-    try {
-      const currentToken = token || localStorage.getItem('adminToken');
-      const refreshTokenValue = localStorage.getItem('adminRefreshToken');
-      
-      // If no token at all, logout immediately
-      if (!currentToken) {
-        console.log('No access token found, logging out...');
-        logout();
-        return false;
-      }
-
-      // If token is expired client-side, try to refresh
-      if (isTokenExpired(currentToken)) {
-        console.log('Token expired, attempting refresh...');
-        
-        if (!refreshTokenValue || refreshTokenValue === 'undefined' || refreshTokenValue === 'null') {
-          console.log('No valid refresh token, logging out...');
-          logout();
-          return false;
-        }
-
-        const newToken = await refreshAccessToken();
-        return !!newToken;
-      }
-
-      // Token appears valid
-      return true;
-    } catch (error: any) {
-      console.error('Token validation failed:', error);
-      logout();
-      return false;
-    }
-  };
-
-  // Refresh token function (handled by axios interceptor, but exposed for manual use)
-  const refreshAccessToken = async () => {
-    try {
-      const refreshToken = localStorage.getItem('adminRefreshToken');
-      
-      if (!refreshToken || refreshToken === 'undefined' || refreshToken === 'null') {
-        throw new Error('No valid refresh token available');
-      }
-
-      console.log('Manually refreshing admin access token...');
-
-      const response = await axiosClient.post(
-        `/auth/refresh-token`,
-        { refresh_token: refreshToken }
-      );
-
-      // Handle different response structures
-      const responseData = response.data.data || response.data;
-      const { access_token, refresh_token } = responseData;
-
-      if (!access_token) {
-        throw new Error('No access token received from refresh endpoint');
-      }
-
-      console.log('Admin token refreshed successfully via AuthContext');
-      
-      // Update tokens
-      localStorage.setItem('adminToken', access_token);
-      if (refresh_token) {
-        localStorage.setItem('adminRefreshToken', refresh_token);
-      }
-      
-      setToken(access_token);
-      return access_token;
-    } catch (error: any) {
-      console.error('Admin token refresh failed in AuthContext:', error.response?.data?.message || error.message);
-      
-      // If refresh fails, clear everything and logout
-      clearAuthData();
-      setToken(null);
-      setUser(null);
-      setEmployee(null);
-      setCompanyId(null);
-      navigate('/auth/signin', { replace: true });
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const initializeAuth = () => {
-      try {
-        const authData = getStoredAuthData();
-        
-        if (!authData) {
-          setIsLoading(false);
-          return;
-        }
-
-        const { token: storedToken, user: storedUser, employee: storedEmployee, companyId: storedCompanyId } = authData;
-
-        // Simply restore the session without aggressive validation
-        // Let the axios interceptor handle token validation on actual API calls
-        setToken(storedToken);
-        setUser(storedUser);
-        setEmployee(storedEmployee);
-        setCompanyId(storedCompanyId);
-      } catch (error) {
-        clearAuthData();
-        setToken(null);
-        setUser(null);
-        setEmployee(null);
-        setCompanyId(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, []);
-
-  // Periodic token validation (every 15 minutes) - less aggressive
-  useEffect(() => {
-    if (!token) return;
-
-    const interval = setInterval(async () => {
-      // Only validate if token is client-side expired
-      if (isTokenExpired(token)) {
-        const refreshed = await refreshAccessToken();
-        if (!refreshed) {
-          logout();
-        }
-      }
-    }, 15 * 60 * 1000); // 15 minutes
-
-    return () => clearInterval(interval);
-  }, [token]);
-
-  const login = (authResponse: { access_token: string; refresh_token: string; user: User; employee: Employee }) => {
-    const { access_token, refresh_token, user: userData, employee: employeeData } = authResponse;
-    
-    if (!access_token || !userData || !employeeData) {
-      return;
-    }
-    
-    try {
-      const companyId = employeeData.company_id;
-      
-      localStorage.setItem('adminToken', access_token);
-      localStorage.setItem('adminData', JSON.stringify(userData));
-      localStorage.setItem('adminEmployee', JSON.stringify(employeeData));
-      localStorage.setItem('adminCompanyId', companyId);
-      localStorage.setItem('adminRefreshToken', refresh_token);
-      
-      setToken(access_token);
-      setUser(userData);
-      setEmployee(employeeData);
-      setCompanyId(companyId);
-    } catch (error) {
-      console.error('Login storage error:', error);
-    }
+  const login = () => {
+    console.log("Dummy login called");
   };
 
   const logout = () => {
-    clearAuthData();
-    setToken(null);
-    setUser(null);
-    setEmployee(null);
-    setCompanyId(null);
-    navigate('/auth/signin');
+    console.log("Dummy logout called (no-op)");
+  };
+
+  const refreshAccessToken = async () => {
+    return "dummy-token";
+  };
+
+  const validateToken = async () => {
+    return true;
+  };
+
+  const validateTokenOnVisit = async () => {
+    return true;
   };
 
   return (
@@ -270,7 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         employee,
         companyId,
         token,
-        isAuthenticated: !!token,
+        isAuthenticated: true, // Always authenticated
         login,
         logout,
         refreshAccessToken,
@@ -287,7 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

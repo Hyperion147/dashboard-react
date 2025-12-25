@@ -1,5 +1,6 @@
+
 import { useMutation } from '@tanstack/react-query';
-import axiosClient from '../client';
+import { dummyEmployee, dummyUser } from "@/data/dummy";
 
 export interface LoginCredentials {
   email: string;
@@ -69,23 +70,36 @@ export interface AuthResponse {
 }
 
 export const loginAdmin = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-  try {
-    const response = await axiosClient.post('/auth/admin/login', credentials);
-    return response.data;
-  } catch (error: any) {
-    throw error;
-  }
+    // Return dummy success
+    return {
+        success: true,
+        code: 200,
+        message: "Success",
+        data: {
+            access_token: "dummy-token",
+            refresh_token: "dummy-refresh",
+            user: dummyUser as User,
+            employee: dummyEmployee as unknown as Employee
+        }
+    };
 };
 
 export const logoutAdmin = async (): Promise<void> => {
-  await axiosClient.post('/auth/logout');
+  return;
 };
 
 export const refreshToken = async (refreshToken: string): Promise<AuthResponse> => {
-  const response = await axiosClient.post('/auth/refresh-token', {
-    refresh_token: refreshToken
-  });
-  return response.data;
+  return {
+      success: true,
+      code: 200,
+      message: "Success",
+      data: {
+          access_token: "dummy-token-refreshed",
+          refresh_token: "dummy-refresh-new",
+          user: dummyUser as User,
+          employee: dummyEmployee as unknown as Employee
+      }
+  };
 };
 
 // React Query hooks

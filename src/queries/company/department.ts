@@ -1,15 +1,17 @@
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axiosClient from "../client";
 import type { Department } from "@/types/company/main-types";
+import { dummyDepartment } from "@/data/dummy";
 
 export function useCompanyDepartments(companyId: string) {
   return useQuery<Department[]>({
     queryKey: ['departments', companyId],
     queryFn: async () => {
-      const response = await axiosClient.get(`/departments/company/${companyId}`);
-      return response.data.data;
+      // return dummy
+      return [dummyDepartment] as unknown as Department[];
     },
     enabled: Boolean(companyId),
+    initialData: ([dummyDepartment] as unknown as Department[]),
   });
 }
 
@@ -18,15 +20,8 @@ export function useCreateDepartment(companyId: string) {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (departmentData: Omit<Department, 'id' | 'companyId'>) => {
-      const response = await axiosClient.post('/departments/create', {
-        company_id: companyId,
-        name: departmentData.name,
-        code: departmentData.code,
-        description: departmentData.description,
-        status: departmentData.status,
-      });
-      return response.data;
+    mutationFn: async (departmentData: any) => {
+      return { ...dummyDepartment, ...departmentData } as unknown as Department;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['departments', companyId] });
@@ -39,14 +34,8 @@ export function useUpdateCompanyDepartment(departmentId: string, companyId: stri
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (departmentData: Partial<Department>) => {
-      const response = await axiosClient.patch(`/departments/${departmentId}/update`, {
-        name: departmentData.name,
-        code: departmentData.code,
-        description: departmentData.description,
-        status: departmentData.status,
-      });
-      return response.data;
+    mutationFn: async (departmentData: any) => {
+      return { ...dummyDepartment, ...departmentData } as unknown as Department;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['departments', companyId] });
@@ -60,8 +49,7 @@ export function useDeleteDepartment(companyId: string) {
   
   return useMutation({
     mutationFn: async (departmentId: string) => {
-      const response = await axiosClient.delete(`/departments/${departmentId}/delete`);
-      return response.data;
+      return;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['departments', companyId] });

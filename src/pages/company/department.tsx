@@ -1,24 +1,24 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "@repo/ui/button";
+import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
+} from "@/components/ui/dialog";
 import { Save, Edit, X, Plus, Trash2 } from "lucide-react";
 import {
   useCompanyDepartments,

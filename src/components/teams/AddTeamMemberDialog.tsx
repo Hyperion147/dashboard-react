@@ -6,16 +6,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
-import { Button } from "@repo/ui/button";
-import { Label } from "@repo/ui/label";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import { Plus, Loader2 } from "lucide-react";
 import { useCompanyEmployees } from "@/queries/employee/employee";
 import { useUpdateEmployee } from "@/queries/employee/employee";

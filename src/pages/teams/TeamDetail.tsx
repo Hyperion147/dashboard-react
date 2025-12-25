@@ -1,17 +1,17 @@
 import { useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useParams, Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Skeleton } from "@repo/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   ArrowLeft,
   Users,

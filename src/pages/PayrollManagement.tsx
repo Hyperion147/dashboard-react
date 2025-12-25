@@ -1,15 +1,15 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Button } from "@repo/ui/button";
-import { Badge } from "@repo/ui/badge";
-import { Input } from "@repo/ui/input";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import {
   Search,
   Trash2,
@@ -38,7 +38,10 @@ export function PayrollManagement() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; period: string } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    id: string;
+    period: string;
+  } | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -51,11 +54,14 @@ export function PayrollManagement() {
     if (!payrolls) return [];
 
     return payrolls.filter((payroll) => {
+      const dateString = payroll.pay_period_start
+        ? format(new Date(payroll.pay_period_start), "MMM yyyy")
+        : "";
+
       const matchesSearch =
-        format(new Date(payroll.pay_period_start), "MMM yyyy")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        payroll.notes?.toLowerCase().includes(searchTerm.toLowerCase());
+        dateString.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payroll.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        false;
 
       const matchesStatus =
         statusFilter === "all" || payroll.status === statusFilter;
@@ -81,12 +87,12 @@ export function PayrollManagement() {
       const amount = Number(p.total_gross);
       return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
-    
+
     const totalDeductions = payrolls.reduce((sum, p) => {
       const amount = Number(p.total_deductions);
       return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
-    
+
     const totalNet = payrolls.reduce((sum, p) => {
       const amount = Number(p.total_net);
       return sum + (isNaN(amount) ? 0 : amount);
@@ -104,7 +110,7 @@ export function PayrollManagement() {
     };
   }, [payrolls]);
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | undefined) => {
     const numAmount = Number(amount);
     if (isNaN(numAmount)) {
       return "$0.00";
@@ -310,77 +316,93 @@ export function PayrollManagement() {
               {filteredPayrolls.map((payroll) => {
                 // Handle both 'id' and 'payroll_id' field names
                 const payrollId = payroll.id || (payroll as any).payroll_id;
-                
-                return (
-                <div
-                  key={payrollId}
-                  className="payroll-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <Link 
-                    to={`/payroll/${payrollId}`}
-                    className="flex-1 cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-                      <h4 className="font-semibold">
-                        {format(
-                          new Date(payroll.pay_period_start),
-                          "MMM dd"
-                        )}{" "}
-                        -{" "}
-                        {format(new Date(payroll.pay_period_end), "MMM dd, yyyy")}
-                      </h4>
-                      <Badge variant={getStatusColor(payroll.status)}>
-                        {payroll.status}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Payment Date:{" "}
-                      {format(new Date(payroll.payment_date), "MMM dd, yyyy")}
-                    </p>
-                    {payroll.notes && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {payroll.notes}
-                      </p>
-                    )}
-                  </Link>
 
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Gross</p>
-                      <p className="font-semibold">
-                        {formatCurrency(payroll.total_gross)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Net</p>
-                      <p className="font-semibold text-green-600">
-                        {formatCurrency(payroll.total_net)}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <EditPayrollStatusDialog payroll={{ ...payroll, id: payrollId }} />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDeleteClick(
-                            payrollId,
-                            format(
-                              new Date(payroll.pay_period_start),
-                              "MMM yyyy"
+                return (
+                  <div
+                    key={payrollId}
+                    className="payroll-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    <Link
+                      to={`/payroll/${payrollId}`}
+                      className="flex-1 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+                        <h4 className="font-semibold">
+                          {payroll.pay_period_start
+                            ? format(
+                                new Date(payroll.pay_period_start),
+                                "MMM dd"
+                              )
+                            : "N/A"}{" "}
+                          -{" "}
+                          {payroll.pay_period_end
+                            ? format(
+                                new Date(payroll.pay_period_end),
+                                "MMM dd, yyyy"
+                              )
+                            : "N/A"}
+                        </h4>
+                        <Badge variant={getStatusColor(payroll.status)}>
+                          {payroll.status}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Payment Date:{" "}
+                        {payroll.payment_date
+                          ? format(
+                              new Date(payroll.payment_date),
+                              "MMM dd, yyyy"
                             )
-                          );
-                        }}
-                        disabled={deletePayrollMutation.isPending}
-                      >
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </Button>
+                          : "N/A"}
+                      </p>
+                      {payroll.notes && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {payroll.notes}
+                        </p>
+                      )}
+                    </Link>
+
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Gross</p>
+                        <p className="font-semibold">
+                          {formatCurrency(payroll.total_gross || 0)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Net</p>
+                        <p className="font-semibold text-green-600">
+                          {formatCurrency(payroll.total_net || 0)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <EditPayrollStatusDialog
+                          payroll={{ ...payroll, id: payrollId }}
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteClick(
+                              payrollId,
+                              payroll.pay_period_start
+                                ? format(
+                                    new Date(payroll.pay_period_start),
+                                    "MMM yyyy"
+                                  )
+                                : "Unknown Period"
+                            );
+                          }}
+                          disabled={deletePayrollMutation.isPending}
+                        >
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
+                );
               })}
             </div>
           )}

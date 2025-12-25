@@ -1,11 +1,11 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { CompanyFormData } from "@/types/company/main-types";
 import { Phone, Mail, Globe } from "lucide-react";
-import { TabsContent } from "@repo/ui/tabs";
-import { Card, CardHeader, CardTitle, CardContent } from "@repo/ui/card";
-import { Textarea } from "@repo/ui/textarea";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+import { TabsContent } from "@/components/ui/tabs";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface CompanyOverviewProps {
   editMode: boolean;

@@ -1,4 +1,4 @@
-import axiosClient from '@/queries/client';
+
 
 export const isTokenExpired = (token: string): boolean => {
   if (!token) return true;
@@ -27,18 +27,7 @@ export const clearAuthData = () => {
 };
 
 export const validateTokenWithServer = async (_token: string): Promise<boolean> => {
-  try {
-    const response = await axiosClient.get(
-      `/admin/dashboard`,
-      {
-        timeout: 5000,
-      }
-    );
-    
-    return response.data.success;
-  } catch (error: any) {
-    return false;
-  }
+  return true;
 };
 
 export const getStoredAuthData = () => {

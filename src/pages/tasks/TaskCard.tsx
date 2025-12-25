@@ -1,8 +1,8 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card"
-import { Badge } from "@repo/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Clock, CalendarIcon, Flag } from "lucide-react"
-import { cn } from "@repo/ui/lib"
+import { cn } from "@/lib/utils"
 import { statusConfig, priorityConfig, type AssignedTask } from "@/data/admin/task-assignment"
 
 interface TaskCardProps {

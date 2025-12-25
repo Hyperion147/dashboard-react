@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { Button } from "@repo/ui/button"
-import { Card, CardContent } from "@repo/ui/card"
-import { Badge } from "@repo/ui/badge"
-import { Input } from "@repo/ui/input"
-import { Textarea } from "@repo/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Dialog,
   DialogContent,
@@ -11,13 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog"
-import { Label } from "@repo/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
-import { Calendar } from "@repo/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover"
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Plus, CalendarIcon, Send } from "lucide-react"
 import { format } from "date-fns"
 import {

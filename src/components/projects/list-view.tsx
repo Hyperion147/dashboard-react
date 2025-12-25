@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react"
-import { Card, CardContent } from "@repo/ui/card"
-import { Badge } from "@repo/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import toast from "react-hot-toast"
-import { Button } from "@repo/ui/button"
-import { Checkbox } from "@repo/ui/checkbox"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, ChevronDown, Clock, User, Calendar } from "lucide-react"
 import {
   Dialog,
@@ -12,10 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog"
-import { Label } from "@repo/ui/label"
-import { Input } from "@repo/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select"
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DueDatePicker } from "../custom/due-date"
 import {
   assignees,

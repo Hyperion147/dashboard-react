@@ -14,24 +14,29 @@ import {
   Users as UsersIcon,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@repo/ui/card";
-import { Input } from "@repo/ui/input";
-import { Label } from "@repo/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { DatePickerWithYearMonth } from "@/components/ui/DatePickerWithYearMonth";
 import { useCompanyDepartments } from "@/queries/departments/departmentQueries";
 import { useDepartmentTeams } from "@/queries/teams/teamQueries";
 import toast from "react-hot-toast";
-import axiosClient from "@/queries/client";
 
 interface EmployeeFormData {
   first_name: string;
@@ -59,7 +64,7 @@ export default function AddEmployeePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { companyId } = useAuth();
-  
+
   // Fetch departments and teams
   const { data: departments } = useCompanyDepartments(companyId || "");
   const { data: teams } = useDepartmentTeams(selectedDepartment);
@@ -88,26 +93,33 @@ export default function AddEmployeePage() {
   const onSubmit = async (data: EmployeeFormData) => {
     try {
       setIsSubmitting(true);
-      
+
       // Ensure company_id is available
       if (!companyId) {
-        toast.error("Company information not available. Please refresh and try again.");
+        toast.error(
+          "Company information not available. Please refresh and try again."
+        );
         return;
       }
-      
+
       // Convert Date objects to ISO strings for API
       const formattedData = {
         ...data,
         company_id: companyId,
-        doj: data.doj instanceof Date ? data.doj.toISOString().split('T')[0] : data.doj,
-        dob: data.dob instanceof Date ? data.dob.toISOString().split('T')[0] : data.dob,
+        doj:
+          data.doj instanceof Date
+            ? data.doj.toISOString().split("T")[0]
+            : data.doj,
+        dob:
+          data.dob instanceof Date
+            ? data.dob.toISOString().split("T")[0]
+            : data.dob,
       };
-      
+
       // Create employee via API
-      const response = await axiosClient.post(
-        `/employees/create`,
-        formattedData
-      );
+      // Create employee via API - MOCK
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = { data: { success: true } };
 
       if (response.data.success) {
         toast.success("Employee added successfully!");
@@ -120,7 +132,8 @@ export default function AddEmployeePage() {
     }
   };
 
-  const isBasicComplete = watch("first_name") && watch("last_name") && watch("email") && watch("doj");
+  const isBasicComplete =
+    watch("first_name") && watch("last_name") && watch("email") && watch("doj");
   const isProfessionalComplete = true; // No longer checking for role
 
   // Show loading state if companyId is not available
@@ -130,7 +143,9 @@ export default function AddEmployeePage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center space-y-4">
             <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
-            <p className="text-muted-foreground">Loading company information...</p>
+            <p className="text-muted-foreground">
+              Loading company information...
+            </p>
           </div>
         </div>
       </div>
@@ -143,7 +158,11 @@ export default function AddEmployeePage() {
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link to="/employees">
-            <Button variant="ghost" size="icon" className="border hover:border-primary transition-colors">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="border hover:border-primary transition-colors"
+            >
               <ArrowLeft className="w-4 h-4" />
             </Button>
           </Link>
@@ -167,16 +186,50 @@ export default function AddEmployeePage() {
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className={`flex items-center gap-2 ${isBasicComplete ? 'text-primary' : 'text-muted-foreground'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isBasicComplete ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                    {isBasicComplete ? <CheckCircle2 className="w-4 h-4" /> : <span className="text-sm font-medium">1</span>}
+                <div
+                  className={`flex items-center gap-2 ${
+                    isBasicComplete ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      isBasicComplete
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                  >
+                    {isBasicComplete ? (
+                      <CheckCircle2 className="w-4 h-4" />
+                    ) : (
+                      <span className="text-sm font-medium">1</span>
+                    )}
                   </div>
                   <span className="text-sm font-medium">Basic Info</span>
                 </div>
-                <div className={`h-px w-12 ${isBasicComplete ? 'bg-primary' : 'bg-muted'}`} />
-                <div className={`flex items-center gap-2 ${isProfessionalComplete ? 'text-primary' : 'text-muted-foreground'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isProfessionalComplete ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                    {isProfessionalComplete ? <CheckCircle2 className="w-4 h-4" /> : <span className="text-sm font-medium">2</span>}
+                <div
+                  className={`h-px w-12 ${
+                    isBasicComplete ? "bg-primary" : "bg-muted"
+                  }`}
+                />
+                <div
+                  className={`flex items-center gap-2 ${
+                    isProfessionalComplete
+                      ? "text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      isProfessionalComplete
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                  >
+                    {isProfessionalComplete ? (
+                      <CheckCircle2 className="w-4 h-4" />
+                    ) : (
+                      <span className="text-sm font-medium">2</span>
+                    )}
                   </div>
                   <span className="text-sm font-medium">Professional</span>
                 </div>
@@ -190,7 +243,11 @@ export default function AddEmployeePage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <Tabs value={currentTab} onValueChange={setCurrentTab} className="space-y-6">
+          <Tabs
+            value={currentTab}
+            onValueChange={setCurrentTab}
+            className="space-y-6"
+          >
             <TabsList className="grid w-full max-w-md grid-cols-2 h-11">
               <TabsTrigger value="basic" className="gap-2">
                 <User className="w-4 h-4" />
@@ -210,7 +267,9 @@ export default function AddEmployeePage() {
                     <User className="w-5 h-5 text-primary" />
                     Basic Information
                   </CardTitle>
-                  <CardDescription>Enter employee's personal and contact details</CardDescription>
+                  <CardDescription>
+                    Enter employee's personal and contact details
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                   {/* Name Section */}
@@ -221,24 +280,37 @@ export default function AddEmployeePage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="first_name" className="text-sm font-medium">
+                        <Label
+                          htmlFor="first_name"
+                          className="text-sm font-medium"
+                        >
                           First Name <span className="text-destructive">*</span>
                         </Label>
                         <Controller
                           name="first_name"
                           control={control}
-                          rules={{ 
+                          rules={{
                             required: "First name is required",
-                            minLength: { value: 2, message: "First name must be at least 2 characters" },
-                            maxLength: { value: 50, message: "First name must not exceed 50 characters" }
+                            minLength: {
+                              value: 2,
+                              message:
+                                "First name must be at least 2 characters",
+                            },
+                            maxLength: {
+                              value: 50,
+                              message:
+                                "First name must not exceed 50 characters",
+                            },
                           }}
                           render={({ field }) => (
                             <>
-                              <Input 
-                                {...field} 
-                                id="first_name" 
-                                placeholder="John" 
-                                className={errors.first_name ? "border-destructive" : ""}
+                              <Input
+                                {...field}
+                                id="first_name"
+                                placeholder="John"
+                                className={
+                                  errors.first_name ? "border-destructive" : ""
+                                }
                               />
                               {errors.first_name && (
                                 <p className="text-sm text-destructive flex items-center gap-1">
@@ -251,24 +323,37 @@ export default function AddEmployeePage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="last_name" className="text-sm font-medium">
+                        <Label
+                          htmlFor="last_name"
+                          className="text-sm font-medium"
+                        >
                           Last Name <span className="text-destructive">*</span>
                         </Label>
                         <Controller
                           name="last_name"
                           control={control}
-                          rules={{ 
+                          rules={{
                             required: "Last name is required",
-                            minLength: { value: 2, message: "Last name must be at least 2 characters" },
-                            maxLength: { value: 50, message: "Last name must not exceed 50 characters" }
+                            minLength: {
+                              value: 2,
+                              message:
+                                "Last name must be at least 2 characters",
+                            },
+                            maxLength: {
+                              value: 50,
+                              message:
+                                "Last name must not exceed 50 characters",
+                            },
                           }}
                           render={({ field }) => (
                             <>
-                              <Input 
-                                {...field} 
-                                id="last_name" 
-                                placeholder="Doe" 
-                                className={errors.last_name ? "border-destructive" : ""}
+                              <Input
+                                {...field}
+                                id="last_name"
+                                placeholder="Doe"
+                                className={
+                                  errors.last_name ? "border-destructive" : ""
+                                }
                               />
                               {errors.last_name && (
                                 <p className="text-sm text-destructive flex items-center gap-1">
@@ -291,7 +376,8 @@ export default function AddEmployeePage() {
                     </div>
                     <div className="space-y-2 max-w-md">
                       <Label htmlFor="email" className="text-sm font-medium">
-                        Email Address <span className="text-destructive">*</span>
+                        Email Address{" "}
+                        <span className="text-destructive">*</span>
                       </Label>
                       <Controller
                         name="email"
@@ -307,12 +393,14 @@ export default function AddEmployeePage() {
                           <>
                             <div className="relative">
                               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                              <Input 
-                                {...field} 
-                                id="email" 
-                                type="email" 
-                                placeholder="john.doe@company.com" 
-                                className={`pl-10 ${errors.email ? "border-destructive" : ""}`}
+                              <Input
+                                {...field}
+                                id="email"
+                                type="email"
+                                placeholder="john.doe@company.com"
+                                className={`pl-10 ${
+                                  errors.email ? "border-destructive" : ""
+                                }`}
                               />
                             </div>
                             {errors.email && (
@@ -327,7 +415,7 @@ export default function AddEmployeePage() {
                           </>
                         )}
                       />
-                  </div>
+                    </div>
                   </div>
 
                   {/* Additional Details */}
@@ -338,13 +426,21 @@ export default function AddEmployeePage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="dob" className="text-sm font-medium">Date of Birth</Label>
+                        <Label htmlFor="dob" className="text-sm font-medium">
+                          Date of Birth
+                        </Label>
                         <Controller
                           name="dob"
                           control={control}
                           render={({ field }) => (
                             <DatePickerWithYearMonth
-                              date={field.value instanceof Date ? field.value : field.value ? new Date(field.value) : undefined}
+                              date={
+                                field.value instanceof Date
+                                  ? field.value
+                                  : field.value
+                                  ? new Date(field.value)
+                                  : undefined
+                              }
                               onDateChange={field.onChange}
                               placeholder="Select date of birth"
                               fromYear={1950}
@@ -354,12 +450,17 @@ export default function AddEmployeePage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="gender" className="text-sm font-medium">Gender</Label>
+                        <Label htmlFor="gender" className="text-sm font-medium">
+                          Gender
+                        </Label>
                         <Controller
                           name="gender"
                           control={control}
                           render={({ field }) => (
-                            <Select value={field.value} onValueChange={field.onChange}>
+                            <Select
+                              value={field.value}
+                              onValueChange={field.onChange}
+                            >
                               <SelectTrigger id="gender" className="w-full">
                                 <SelectValue placeholder="Select gender" />
                               </SelectTrigger>
@@ -397,7 +498,10 @@ export default function AddEmployeePage() {
                         name="blood_group"
                         control={control}
                         render={({ field }) => (
-                          <Select value={field.value} onValueChange={field.onChange}>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
                             <SelectTrigger id="blood_group">
                               <SelectValue placeholder="Select blood group" />
                             </SelectTrigger>
@@ -421,7 +525,10 @@ export default function AddEmployeePage() {
                         name="marital_status"
                         control={control}
                         render={({ field }) => (
-                          <Select value={field.value} onValueChange={field.onChange}>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
                             <SelectTrigger id="marital_status">
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
@@ -446,7 +553,8 @@ export default function AddEmployeePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="doj" className="text-sm font-medium">
-                          Date of Joining <span className="text-destructive">*</span>
+                          Date of Joining{" "}
+                          <span className="text-destructive">*</span>
                         </Label>
                         <Controller
                           name="doj"
@@ -455,10 +563,18 @@ export default function AddEmployeePage() {
                           render={({ field }) => (
                             <>
                               <DatePicker
-                                date={field.value instanceof Date ? field.value : field.value ? new Date(field.value) : undefined}
+                                date={
+                                  field.value instanceof Date
+                                    ? field.value
+                                    : field.value
+                                    ? new Date(field.value)
+                                    : undefined
+                                }
                                 onDateChange={field.onChange}
                                 placeholder="Select joining date"
-                                className={errors.doj ? "border-destructive" : ""}
+                                className={
+                                  errors.doj ? "border-destructive" : ""
+                                }
                               />
                               {errors.doj && (
                                 <p className="text-sm text-destructive flex items-center gap-1">
@@ -480,8 +596,16 @@ export default function AddEmployeePage() {
                           rules={{ required: "Status is required" }}
                           render={({ field }) => (
                             <>
-                              <Select value={field.value} onValueChange={field.onChange}>
-                                <SelectTrigger id="status" className={errors.status ? "border-destructive" : ""}>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger
+                                  id="status"
+                                  className={
+                                    errors.status ? "border-destructive" : ""
+                                  }
+                                >
                                   <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -535,7 +659,10 @@ export default function AddEmployeePage() {
                     <Building2 className="w-5 h-5 text-primary" />
                     Professional Details
                   </CardTitle>
-                  <CardDescription>Enter employee's work-related information and organizational structure</CardDescription>
+                  <CardDescription>
+                    Enter employee's work-related information and organizational
+                    structure
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                   {/* Position Details */}
@@ -546,26 +673,48 @@ export default function AddEmployeePage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="job_title" className="text-sm font-medium">Job Title</Label>
+                        <Label
+                          htmlFor="job_title"
+                          className="text-sm font-medium"
+                        >
+                          Job Title
+                        </Label>
                         <Controller
                           name="job_title"
                           control={control}
                           render={({ field }) => (
-                            <Input {...field} id="job_title" placeholder="e.g., Senior Frontend Developer" />
+                            <Input
+                              {...field}
+                              id="job_title"
+                              placeholder="e.g., Senior Frontend Developer"
+                            />
                           )}
                         />
-                        <p className="text-xs text-muted-foreground">Official job title</p>
+                        <p className="text-xs text-muted-foreground">
+                          Official job title
+                        </p>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="designation" className="text-sm font-medium">Designation</Label>
+                        <Label
+                          htmlFor="designation"
+                          className="text-sm font-medium"
+                        >
+                          Designation
+                        </Label>
                         <Controller
                           name="designation"
                           control={control}
                           render={({ field }) => (
-                            <Input {...field} id="designation" placeholder="e.g., Tech Lead" />
+                            <Input
+                              {...field}
+                              id="designation"
+                              placeholder="e.g., Tech Lead"
+                            />
                           )}
                         />
-                        <p className="text-xs text-muted-foreground">Internal designation</p>
+                        <p className="text-xs text-muted-foreground">
+                          Internal designation
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -577,13 +726,18 @@ export default function AddEmployeePage() {
                       <span>Experience Level</span>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="level" className="text-sm font-medium">Seniority Level</Label>
+                      <Label htmlFor="level" className="text-sm font-medium">
+                        Seniority Level
+                      </Label>
                       <Controller
                         name="level"
                         control={control}
                         render={({ field }) => (
                           <>
-                            <Select value={field.value} onValueChange={field.onChange}>
+                            <Select
+                              value={field.value}
+                              onValueChange={field.onChange}
+                            >
                               <SelectTrigger id="level">
                                 <SelectValue placeholder="Select level" />
                               </SelectTrigger>
@@ -637,13 +791,21 @@ export default function AddEmployeePage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="department_id" className="text-sm font-medium">Department</Label>
+                        <Label
+                          htmlFor="department_id"
+                          className="text-sm font-medium"
+                        >
+                          Department
+                        </Label>
                         <Controller
                           name="department_id"
                           control={control}
                           render={({ field }) => (
                             <>
-                              <Select value={field.value} onValueChange={field.onChange}>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
                                 <SelectTrigger id="department_id">
                                   <SelectValue placeholder="Select department" />
                                 </SelectTrigger>
@@ -667,13 +829,21 @@ export default function AddEmployeePage() {
                       </div>
                       {selectedDepartment && (
                         <div className="space-y-2">
-                          <Label htmlFor="team_id" className="text-sm font-medium">Team</Label>
+                          <Label
+                            htmlFor="team_id"
+                            className="text-sm font-medium"
+                          >
+                            Team
+                          </Label>
                           <Controller
                             name="team_id"
                             control={control}
                             render={({ field }) => (
                               <>
-                                <Select value={field.value} onValueChange={field.onChange}>
+                                <Select
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                >
                                   <SelectTrigger id="team_id">
                                     <SelectValue placeholder="Select team" />
                                   </SelectTrigger>
@@ -682,14 +852,18 @@ export default function AddEmployeePage() {
                                       <SelectItem key={team.id} value={team.id}>
                                         <div className="flex items-center gap-2">
                                           <UsersIcon className="w-3 h-3" />
-                                          {team.name} <span className="text-xs text-muted-foreground">({team.code})</span>
+                                          {team.name}{" "}
+                                          <span className="text-xs text-muted-foreground">
+                                            ({team.code})
+                                          </span>
                                         </div>
                                       </SelectItem>
                                     ))}
                                   </SelectContent>
                                 </Select>
                                 <p className="text-xs text-muted-foreground">
-                                  {teams?.length || 0} teams in selected department
+                                  {teams?.length || 0} teams in selected
+                                  department
                                 </p>
                               </>
                             )}
@@ -706,7 +880,12 @@ export default function AddEmployeePage() {
                       <span>Professional Summary</span>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="profile_summary" className="text-sm font-medium">Profile Summary</Label>
+                      <Label
+                        htmlFor="profile_summary"
+                        className="text-sm font-medium"
+                      >
+                        Profile Summary
+                      </Label>
                       <Controller
                         name="profile_summary"
                         control={control}
@@ -738,26 +917,33 @@ export default function AddEmployeePage() {
                 <div className="flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-primary mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium">Ready to add employee?</p>
+                    <p className="text-sm font-medium">
+                      Ready to add employee?
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      All fields marked with * are required. Review the information before submitting.
+                      All fields marked with * are required. Review the
+                      information before submitting.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    disabled={isSubmitting} 
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isSubmitting}
                     asChild
                     className="flex-1 sm:flex-none"
                   >
                     <Link to="/employees">Cancel</Link>
                   </Button>
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting || !isBasicComplete || !isProfessionalComplete} 
+                  <Button
+                    type="submit"
+                    disabled={
+                      isSubmitting ||
+                      !isBasicComplete ||
+                      !isProfessionalComplete
+                    }
                     className="min-w-[160px] flex-1 sm:flex-none"
                   >
                     {isSubmitting ? (

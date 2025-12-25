@@ -43,6 +43,16 @@ export interface EmployeeDetails {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  department?: {
+    id: string;
+    name: string;
+    code: string;
+  };
+  team?: {
+    id: string;
+    name: string;
+    code: string;
+  };
 }
 
 // Employee interface matching your API response
@@ -57,6 +67,8 @@ export interface Employee {
   doj: string; // Date of joining
   doe: string | null; // Date of exit
   status: "active" | "inactive";
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

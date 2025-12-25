@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { Popover, PopoverTrigger, PopoverContent } from "@repo/ui/popover"
-import { Calendar } from "@repo/ui/calendar"
-import { Button } from "@repo/ui/button"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button"
 import { format } from "date-fns"
 
 type DueDatePickerProps = {

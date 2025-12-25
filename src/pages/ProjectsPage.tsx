@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@repo/ui/button";
+import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import {
   Card,
@@ -7,9 +7,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { Input } from "@repo/ui/input";
-import { Badge } from "@repo/ui/badge";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Plus, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -19,15 +19,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/dialog";
-import { Label } from "@repo/ui/label";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import { DueDatePicker } from "@/components/custom/due-date";
 import { projects, colors, statusColors, type Project } from "@/data/projects";
 import { gsap } from "gsap";

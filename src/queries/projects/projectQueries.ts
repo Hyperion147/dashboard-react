@@ -1,24 +1,18 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import apiClient from "../client";
-import type { Project, ProjectWithTeams, ProjectTeam } from "@/types/projects/project";
 
-interface ApiResponse<T> {
-  success: boolean;
-  code: number;
-  message: string;
-  data: T;
-}
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Project, ProjectWithTeams, ProjectTeam } from "@/types/projects/project";
+import { dummyProjects } from "@/data/dummy";
 
 // Get projects by company
 export const useCompanyProjects = (companyId: string) => {
   return useQuery({
     queryKey: ["projects", "company", companyId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Project[]>>(`/projects/company/${companyId}`);
-      return response.data.data;
+      // Mock return
+      return dummyProjects;
     },
     enabled: !!companyId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    initialData: dummyProjects
   });
 };
 
@@ -27,11 +21,13 @@ export const useProject = (projectId: string) => {
   return useQuery({
     queryKey: ["projects", projectId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<ProjectWithTeams>>(`/projects/${projectId}/view`);
-      return response.data.data;
+      // Mock return single project
+      // Add fake empty teams array to satisfy type
+      const project = dummyProjects.find(p => p.id === projectId) || dummyProjects[0];
+      return { ...project, teams: [] } as unknown as ProjectWithTeams;
     },
     enabled: !!projectId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    initialData: { ...dummyProjects[0], teams: [] } as unknown as ProjectWithTeams,
   });
 };
 
@@ -40,11 +36,10 @@ export const useProjectTeams = (projectId: string) => {
   return useQuery({
     queryKey: ["project-teams", projectId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<ProjectTeam[]>>(`/project-teams/project/${projectId}`);
-      return response.data.data;
+      return [] as ProjectTeam[];
     },
     enabled: !!projectId,
-    staleTime: 1000 * 60 * 3, // 3 minutes
+    initialData: [] as ProjectTeam[],
   });
 };
 
@@ -53,41 +48,10 @@ export const useTeamProjects = (teamId: string, companyId: string) => {
   return useQuery({
     queryKey: ["projects", "team", teamId],
     queryFn: async () => {
-      // Get all company projects
-      const projectsResponse = await apiClient.get<ApiResponse<Project[]>>(`/projects/company/${companyId}`);
-      const projects = projectsResponse.data.data;
-      
-      // Limit concurrent requests to avoid rate limiting
-      const batchSize = 3;
-      const projectsWithTeams: (Project & { projectTeams: ProjectTeam[] } | null)[] = [];
-      
-      for (let i = 0; i < projects.length; i += batchSize) {
-        const batch = projects.slice(i, i + batchSize);
-        const batchResults = await Promise.all(
-          batch.map(async (project) => {
-            try {
-              const teamsResponse = await apiClient.get<ApiResponse<ProjectTeam[]>>(`/project-teams/project/${project.id}`);
-              const teams = teamsResponse.data.data;
-              const hasTeam = teams.some(pt => pt.team_id === teamId);
-              return hasTeam ? { ...project, projectTeams: teams.filter(pt => pt.team_id === teamId) } : null;
-            } catch {
-              return null;
-            }
-          })
-        );
-        projectsWithTeams.push(...batchResults);
-        
-        // Add small delay between batches to avoid rate limiting
-        if (i + batchSize < projects.length) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-        }
-      }
-      
-      return projectsWithTeams.filter((p): p is Project & { projectTeams: ProjectTeam[] } => p !== null);
+      return [] as (Project & { projectTeams: ProjectTeam[] })[];
     },
     enabled: !!teamId && !!companyId,
-    staleTime: 1000 * 60 * 5, // 5 minutes - don't refetch too often
-    gcTime: 1000 * 60 * 10, // 10 minutes cache
+    initialData: [] as (Project & { projectTeams: ProjectTeam[] })[], 
   });
 };
 
@@ -96,18 +60,8 @@ export const useCreateProject = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: {
-      company_id: string;
-      name: string;
-      code: string;
-      description: string;
-      manager_id: string;
-      start_date: string;
-      end_date: string;
-      status: string;
-    }) => {
-      const response = await apiClient.post<ApiResponse<Project>>("/projects/create", data);
-      return response.data.data;
+    mutationFn: async (data: any) => {
+      return { ...dummyProjects[0], ...data } as Project;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["projects", "company", variables.company_id] });
@@ -120,9 +74,8 @@ export const useUpdateProject = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...data }: Partial<Project> & { id: string }) => {
-      const response = await apiClient.patch<ApiResponse<Project>>(`/projects/${id}/update`, data);
-      return response.data.data;
+    mutationFn: async ({ id, ...data }: any) => {
+      return { ...dummyProjects[0], id, ...data } as Project;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["projects", variables.id] });
@@ -137,8 +90,7 @@ export const useUpdateProjectStatus = () => {
 
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: Project["status"] }) => {
-      const response = await apiClient.patch<ApiResponse<Project>>(`/projects/${id}/updateStatus`, { status });
-      return response.data.data;
+      return { ...dummyProjects[0], id, status } as Project;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["projects", data.id] });
@@ -152,15 +104,8 @@ export const useAssignTeamToProject = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: {
-      project_id: string;
-      team_id: string;
-      start_date: string;
-      end_date: string;
-      status: string;
-    }) => {
-      const response = await apiClient.post<ApiResponse<ProjectTeam>>("/project-teams/create", data);
-      return response.data.data;
+    mutationFn: async (data: any) => {
+       return {} as ProjectTeam;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["project-teams", variables.project_id] });
@@ -175,8 +120,7 @@ export const useRemoveTeamFromProject = () => {
 
   return useMutation({
     mutationFn: async (projectTeamId: string) => {
-      const response = await apiClient.delete<ApiResponse<void>>(`/project-teams/${projectTeamId}/delete`);
-      return response.data.data;
+      return;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project-teams"] });

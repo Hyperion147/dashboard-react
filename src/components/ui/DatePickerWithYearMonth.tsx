@@ -1,13 +1,13 @@
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { Button } from "@repo/ui/button";
-import { Calendar } from "@repo/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/popover";
-import { cn } from "@repo/ui/lib";
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface DatePickerWithYearMonthProps {
   date?: Date;

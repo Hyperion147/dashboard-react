@@ -1,5 +1,5 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import apiClient from "../client";
 import type {
   Payroll,
   Payslip,
@@ -8,12 +8,37 @@ import type {
   CreatePayslipData,
 } from "@/types/payroll/payroll";
 
-interface ApiResponse<T> {
-  success: boolean;
-  code: number;
-  message: string;
-  data: T;
-}
+const dummyPayroll: Payroll = {
+    id: "payroll-001",
+    company_id: "comp-001",
+    month: "2024-01",
+    status: "finalized",
+    total_amount: 100000,
+    created_at: "2024-01-31",
+    updated_at: "2024-01-31",
+    payslips: []
+};
+
+const dummyPayslip: Payslip = {
+    id: "payslip-001",
+    payroll_id: "payroll-001",
+    employee_id: "emp-001",
+    basic_salary: 50000,
+    hra: 20000,
+    allowances: 10000,
+    deductions: 5000,
+    net_salary: 75000,
+    status: "paid",
+    created_at: "2024-01-31",
+    updated_at: "2024-01-31",
+    employee: {
+        id: "emp-001",
+        first_name: "John",
+        last_name: "Doe",
+        email: "john@example.com",
+        idd: "EMP-001"
+    }
+};
 
 // ============ PAYROLL QUERIES ============
 
@@ -22,13 +47,11 @@ export const useCompanyPayrolls = (companyId: string) => {
   return useQuery({
     queryKey: ["payrolls", "company", companyId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Payroll[]>>(
-        `/payrolls/company/${companyId}`
-      );
-      return response.data.data;
+      // Mock payrolls
+      return [dummyPayroll] as Payroll[];
     },
     enabled: !!companyId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    initialData: ([dummyPayroll] as Payroll[]),
   });
 };
 
@@ -37,12 +60,10 @@ export const usePayroll = (payrollId: string) => {
   return useQuery({
     queryKey: ["payrolls", payrollId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Payroll>>(
-        `/payrolls/${payrollId}`
-      );
-      return response.data.data;
+      return dummyPayroll as Payroll;
     },
     enabled: !!payrollId,
+    initialData: (dummyPayroll as Payroll),
   });
 };
 
@@ -52,11 +73,7 @@ export const useCreatePayroll = () => {
 
   return useMutation({
     mutationFn: async (data: CreatePayrollData) => {
-      const response = await apiClient.post<ApiResponse<Payroll>>(
-        "/payrolls",
-        data
-      );
-      return response.data.data;
+      return { ...dummyPayroll, ...data } as Payroll;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
@@ -75,11 +92,7 @@ export const useUpdatePayroll = () => {
       id,
       ...data
     }: UpdatePayrollData & { id: string }) => {
-      const response = await apiClient.put<ApiResponse<Payroll>>(
-        `/payrolls/${id}`,
-        data
-      );
-      return response.data.data;
+       return { ...dummyPayroll, id, ...data } as Payroll;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["payrolls", data.id] });
@@ -96,10 +109,7 @@ export const useDeletePayroll = () => {
 
   return useMutation({
     mutationFn: async (payrollId: string) => {
-      const response = await apiClient.delete<ApiResponse<void>>(
-        `/payrolls/${payrollId}`
-      );
-      return response.data;
+      return;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["payrolls"] });
@@ -114,12 +124,10 @@ export const usePayrollPayslips = (payrollId: string) => {
   return useQuery({
     queryKey: ["payslips", "payroll", payrollId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Payslip[]>>(
-        `/payslips/payroll/${payrollId}`
-      );
-      return response.data.data;
+      return [dummyPayslip] as Payslip[];
     },
     enabled: !!payrollId,
+    initialData: ([dummyPayslip] as Payslip[]),
   });
 };
 
@@ -128,12 +136,10 @@ export const useEmployeePayslips = (employeeId: string) => {
   return useQuery({
     queryKey: ["payslips", "employee", employeeId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Payslip[]>>(
-        `/payslips/employee/${employeeId}`
-      );
-      return response.data.data;
+      return [dummyPayslip] as Payslip[];
     },
     enabled: !!employeeId,
+    initialData: ([dummyPayslip] as Payslip[]),
   });
 };
 
@@ -142,12 +148,10 @@ export const usePayslip = (payslipId: string) => {
   return useQuery({
     queryKey: ["payslips", payslipId],
     queryFn: async () => {
-      const response = await apiClient.get<ApiResponse<Payslip>>(
-        `/payslips/${payslipId}`
-      );
-      return response.data.data;
+      return dummyPayslip as Payslip;
     },
     enabled: !!payslipId,
+    initialData: (dummyPayslip as Payslip),
   });
 };
 
@@ -156,12 +160,8 @@ export const useCreatePayslip = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: CreatePayslipData) => {
-      const response = await apiClient.post<ApiResponse<Payslip>>(
-        "/payslips",
-        data
-      );
-      return response.data.data;
+    mutationFn: async (data: any) => {
+       return { ...dummyPayslip, ...data } as Payslip;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
@@ -183,11 +183,7 @@ export const useUpdatePayslip = () => {
       id,
       ...data
     }: Partial<CreatePayslipData> & { id: string }) => {
-      const response = await apiClient.put<ApiResponse<Payslip>>(
-        `/payslips/${id}`,
-        data
-      );
-      return response.data.data;
+       return { ...dummyPayslip, id, ...data } as Payslip;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["payslips", data.id] });
@@ -207,10 +203,7 @@ export const useDeletePayslip = () => {
 
   return useMutation({
     mutationFn: async (payslipId: string) => {
-      const response = await apiClient.delete<ApiResponse<void>>(
-        `/payslips/${payslipId}`
-      );
-      return response.data;
+      return;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["payslips"] });

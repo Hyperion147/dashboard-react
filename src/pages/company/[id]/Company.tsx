@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import CompanyOverview from "../company-overview";
 import CompanyDepartments from "../department";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@repo/ui/tabs"; // Adjust import path
-import { Input } from "@repo/ui/input";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Adjust import path
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Edit, Save, X } from "lucide-react";
 import {
   Select,
@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import { statusColors, typeColors } from "@/types/company/colors";
 import {
   useCompanyDetail,

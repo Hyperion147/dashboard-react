@@ -1,5 +1,5 @@
 
-import { cn } from "@repo/ui/lib";
+import { cn } from "@/lib/utils";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";

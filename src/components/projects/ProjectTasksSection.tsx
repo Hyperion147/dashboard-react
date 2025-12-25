@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Badge } from "@repo/ui/badge";
-import { Button } from "@repo/ui/button";
-import { Skeleton } from "@repo/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProjectTasks } from "@/queries/tasks/taskQueries";

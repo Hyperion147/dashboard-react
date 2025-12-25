@@ -1,27 +1,18 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axiosClient from "../client";
-import type { Employee } from "@/types/employees/employee";
 
-// API Response wrapper
-interface ApiResponse<T> {
-  success: boolean;
-  code: number;
-  message: string;
-  data: T;
-}
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Employee } from "@/types/employees/employee";
+import { dummyEmployee, dummyEmployeesList } from "@/data/dummy";
 
 // Fetch all employees by company ID
 export function useCompanyEmployees(companyId: string) {
   return useQuery({
     queryKey: ["company-employees", companyId],
     queryFn: async () => {
-      const response = await axiosClient.get<ApiResponse<Employee[]>>(
-        `/employees/company/${companyId}`
-      );
-      return response.data.data;
+      // Return dummy list
+      return dummyEmployeesList as Employee[];
     },
     enabled: !!companyId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    initialData: dummyEmployeesList as Employee[],
   });
 }
 
@@ -30,14 +21,11 @@ export function useEmployeeDetail(employeeId: string) {
   return useQuery({
     queryKey: ["employee-detail", employeeId],
     queryFn: async () => {
-      const response = await axiosClient.get<ApiResponse<Employee>>(
-        `/employees/${employeeId}/view`
-      );
-      return response.data.data;
+      // Return dummy single employee
+      return dummyEmployee as Employee;
     },
     enabled: !!employeeId && employeeId !== "",
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    retry: 1,
+    initialData: dummyEmployee as Employee,
   });
 }
 
@@ -47,15 +35,8 @@ export function useUpdateEmployee(employeeId?: string) {
 
   return useMutation({
     mutationFn: async (data: Partial<Employee> & { id?: string; team_id?: string }) => {
-      const id = data.id || employeeId;
-      if (!id) throw new Error("Employee ID is required");
-      
-      const { id: _, ...updateData } = data;
-      const response = await axiosClient.patch<ApiResponse<Employee>>(
-        `/employees/${id}/update`,
-        updateData
-      );
-      return response.data.data;
+      // Mock update
+      return { ...dummyEmployee, ...data } as Employee;
     },
     onSuccess: (data, variables) => {
       // Invalidate and refetch the specific team's employees if team_id was updated
@@ -83,9 +64,9 @@ export function useCreateEmployee(companyId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: Omit<Employee, "id" | "createdAt" | "updatedAt" | "deletedAt" | "company">) => {
-      const response = await axiosClient.post<ApiResponse<Employee>>("/employees", data);
-      return response.data.data;
+    mutationFn: async (data: any) => {
+      // Mock create
+      return { ...dummyEmployee, ...data } as Employee;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -101,7 +82,8 @@ export function useDeleteEmployee(companyId: string) {
 
   return useMutation({
     mutationFn: async (employeeId: string) => {
-      await axiosClient.delete(`/employees/${employeeId}`);
+      // Mock delete
+      return true;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

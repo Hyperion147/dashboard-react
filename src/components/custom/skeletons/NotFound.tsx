@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button } from "@repo/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
+} from "@/components/ui/card";
 
 export default function NotFound() {
   return (

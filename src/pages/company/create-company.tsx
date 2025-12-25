@@ -1,13 +1,13 @@
-import { Button } from "@repo/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -17,7 +17,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/select";
+} from "@/components/ui/select";
 import { Controller, useForm } from "react-hook-form";
 import type { FormData } from "@/types/company/main-types";
 import { useCreateCompany } from "@/queries/company/company-queries";

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card"
-import { Badge } from "@repo/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { CheckCircle2, Circle } from "lucide-react"
 import { getProjectPhases, getProjectMilestones } from "@/data/projects/get-project-data"
 import { gsap } from "gsap"

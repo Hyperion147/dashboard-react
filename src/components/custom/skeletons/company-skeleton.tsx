@@ -1,5 +1,5 @@
-import { Skeleton } from "@repo/ui/skeleton";
-import { Tabs, TabsContent } from "@repo/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 
 export function CompanyPageSkeleton() {
   return (
