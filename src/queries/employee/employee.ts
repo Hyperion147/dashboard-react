@@ -30,7 +30,7 @@ export function useEmployeeDetail(employeeId: string) {
 }
 
 // Update employee
-export function useUpdateEmployee(employeeId?: string) {
+export function useUpdateEmployee(_employeeId?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -81,7 +81,7 @@ export function useDeleteEmployee(companyId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (employeeId: string) => {
+    mutationFn: async (_employeeId: string) => {
       // Mock delete
       return true;
     },

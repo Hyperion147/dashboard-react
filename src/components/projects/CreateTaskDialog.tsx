@@ -20,28 +20,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Plus, Loader2, CalendarIcon, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCreateTask } from "@/queries/tasks/taskQueries";
-import { useProjectTeams } from "@/queries/projects/projectQueries";
+// import { useCreateTask } from "@/queries/tasks/taskQueries";
+// import { useProjectTeams } from "@/queries/projects/projectQueries";
 import { useTeamMembers } from "@/queries/teams/teamQueries";
 import toast from "react-hot-toast";
-
-interface CreateTaskDialogProps {
-  projectId: string;
-}
 
 type TaskFormData = {
   team_id: string;
   assigned_to_employee_id: string;
   title: string;
   description: string;
-  status: "todo" | "in_progress" | "developed" | "code_review" | "deployment" | "qa" | "done";
+  status:
+    | "todo"
+    | "in_progress"
+    | "developed"
+    | "code_review"
+    | "deployment"
+    | "qa"
+    | "done";
   priority: "low" | "medium" | "high" | "urgent";
   due_date: Date | undefined;
 };
+
+interface CreateTaskDialogProps {
+  projectId: string;
+}
 
 interface TeamMember {
   id: string;
@@ -55,11 +66,23 @@ interface TeamMember {
   status: string;
 }
 
+// Mock hooks
+const useCreateTask = () => ({
+  mutateAsync: async (_data: any) => {
+    await new Promise((r) => setTimeout(r, 1000));
+  },
+  isPending: false,
+});
+
 export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
   const [open, setOpen] = useState(false);
 
   const createTaskMutation = useCreateTask();
-  const { data: projectTeams, isLoading: isTeamsLoading } = useProjectTeams(projectId);
+  // Mock useProjectTeams
+  const { data: projectTeams, isLoading: isTeamsLoading } = {
+    data: [] as any[],
+    isLoading: false,
+  };
 
   const form = useForm<TaskFormData>({
     defaultValues: {
@@ -78,7 +101,8 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
   const selectedTeamId = form.watch("team_id");
 
   // Fetch team members when a team is selected
-  const { data: teamMembers, isLoading: isTeamMembersLoading } = useTeamMembers(selectedTeamId);
+  const { data: teamMembers, isLoading: isTeamMembersLoading } =
+    useTeamMembers(selectedTeamId);
 
   // Reset form when dialog closes
   useEffect(() => {
@@ -116,31 +140,45 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
       toast.success("Task created successfully!");
       setOpen(false);
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || "Failed to create task";
+      const errorMessage =
+        error?.response?.data?.message || "Failed to create task";
       toast.error(errorMessage);
     }
   });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent": return "text-red-600";
-      case "high": return "text-orange-600";
-      case "medium": return "text-yellow-600";
-      case "low": return "text-green-600";
-      default: return "";
+      case "urgent":
+        return "text-red-600";
+      case "high":
+        return "text-orange-600";
+      case "medium":
+        return "text-yellow-600";
+      case "low":
+        return "text-green-600";
+      default:
+        return "";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "done": return "bg-green-500";
-      case "qa": return "bg-blue-500";
-      case "deployment": return "bg-purple-500";
-      case "code_review": return "bg-indigo-500";
-      case "developed": return "bg-cyan-500";
-      case "in_progress": return "bg-yellow-500";
-      case "todo": return "bg-gray-500";
-      default: return "bg-gray-500";
+      case "done":
+        return "bg-green-500";
+      case "qa":
+        return "bg-blue-500";
+      case "deployment":
+        return "bg-purple-500";
+      case "code_review":
+        return "bg-indigo-500";
+      case "developed":
+        return "bg-cyan-500";
+      case "in_progress":
+        return "bg-yellow-500";
+      case "todo":
+        return "bg-gray-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
@@ -207,7 +245,9 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
                 },
               })}
               rows={4}
-              className={`resize-none ${form.formState.errors.description ? "border-red-500" : ""}`}
+              className={`resize-none ${
+                form.formState.errors.description ? "border-red-500" : ""
+              }`}
             />
             {form.formState.errors.description && (
               <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
@@ -227,26 +267,39 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
               </Label>
               <Select
                 value={form.watch("team_id")}
-                onValueChange={(value) => form.setValue("team_id", value, { shouldValidate: true })}
+                onValueChange={(value) =>
+                  form.setValue("team_id", value, { shouldValidate: true })
+                }
                 disabled={isTeamsLoading}
               >
-                <SelectTrigger className={`w-full ${form.formState.errors.team_id ? "border-red-500" : ""}`}>
-                  <SelectValue placeholder={isTeamsLoading ? "Loading teams..." : "Select team"} />
+                <SelectTrigger
+                  className={`w-full ${
+                    form.formState.errors.team_id ? "border-red-500" : ""
+                  }`}
+                >
+                  <SelectValue
+                    placeholder={
+                      isTeamsLoading ? "Loading teams..." : "Select team"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {projectTeams?.map((pt) => (
                     <SelectItem key={pt.id} value={pt.team_id}>
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{pt.team?.name}</span>
-                        <span className="text-xs text-muted-foreground">({pt.team?.code})</span>
+                        <span className="text-xs text-muted-foreground">
+                          ({pt.team?.code})
+                        </span>
                       </div>
                     </SelectItem>
                   ))}
-                  {(!projectTeams || projectTeams.length === 0) && !isTeamsLoading && (
-                    <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                      No teams assigned to this project
-                    </div>
-                  )}
+                  {(!projectTeams || projectTeams.length === 0) &&
+                    !isTeamsLoading && (
+                      <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                        No teams assigned to this project
+                      </div>
+                    )}
                 </SelectContent>
               </Select>
               {form.formState.errors.team_id && (
@@ -263,17 +316,29 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
               </Label>
               <Select
                 value={form.watch("assigned_to_employee_id")}
-                onValueChange={(value) => form.setValue("assigned_to_employee_id", value, { shouldValidate: true })}
+                onValueChange={(value) =>
+                  form.setValue("assigned_to_employee_id", value, {
+                    shouldValidate: true,
+                  })
+                }
                 disabled={isTeamMembersLoading || !selectedTeamId}
               >
-                <SelectTrigger className={`w-full ${form.formState.errors.assigned_to_employee_id ? "border-red-500" : ""}`}>
-                  <SelectValue placeholder={
-                    !selectedTeamId 
-                      ? "Select a team first" 
-                      : isTeamMembersLoading 
-                        ? "Loading team members..." 
+                <SelectTrigger
+                  className={`w-full ${
+                    form.formState.errors.assigned_to_employee_id
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                >
+                  <SelectValue
+                    placeholder={
+                      !selectedTeamId
+                        ? "Select a team first"
+                        : isTeamMembersLoading
+                        ? "Loading team members..."
                         : "Select employee"
-                  } />
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {teamMembers && teamMembers.length > 0 ? (
@@ -283,7 +348,9 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
                           <span className="font-medium">
                             {member.first_name} {member.last_name}
                           </span>
-                          <span className="text-xs text-muted-foreground">{member.email}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {member.email}
+                          </span>
                           {member.job_title && (
                             <span className="text-xs text-muted-foreground">
                               {member.job_title} • {member.level}
@@ -294,7 +361,9 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
                     ))
                   ) : (
                     <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                      {selectedTeamId && !isTeamMembersLoading ? "No members in this team" : "Select a team first"}
+                      {selectedTeamId && !isTeamMembersLoading
+                        ? "No members in this team"
+                        : "Select a team first"}
                     </div>
                   )}
                 </SelectContent>
@@ -307,7 +376,8 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
               )}
               {selectedTeamId && teamMembers && teamMembers.length > 0 && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  {teamMembers.length} member{teamMembers.length !== 1 ? 's' : ''} in this team
+                  {teamMembers.length} member
+                  {teamMembers.length !== 1 ? "s" : ""} in this team
                 </p>
               )}
             </div>
@@ -320,7 +390,9 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
               </Label>
               <Select
                 value={form.watch("status")}
-                onValueChange={(value) => form.setValue("status", value as TaskFormData["status"])}
+                onValueChange={(value) =>
+                  form.setValue("status", value as TaskFormData["status"])
+                }
               >
                 <SelectTrigger className="w-full">
                   <SelectValue />
@@ -328,43 +400,71 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
                 <SelectContent>
                   <SelectItem value="todo">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("todo")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "todo"
+                        )}`}
+                      />
                       To Do
                     </div>
                   </SelectItem>
                   <SelectItem value="in_progress">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("in_progress")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "in_progress"
+                        )}`}
+                      />
                       In Progress
                     </div>
                   </SelectItem>
                   <SelectItem value="developed">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("developed")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "developed"
+                        )}`}
+                      />
                       Developed
                     </div>
                   </SelectItem>
                   <SelectItem value="code_review">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("code_review")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "code_review"
+                        )}`}
+                      />
                       Code Review
                     </div>
                   </SelectItem>
                   <SelectItem value="deployment">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("deployment")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "deployment"
+                        )}`}
+                      />
                       Deployment
                     </div>
                   </SelectItem>
                   <SelectItem value="qa">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("qa")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "qa"
+                        )}`}
+                      />
                       QA
                     </div>
                   </SelectItem>
                   <SelectItem value="done">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor("done")}`} />
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(
+                          "done"
+                        )}`}
+                      />
                       Done
                     </div>
                   </SelectItem>
@@ -378,7 +478,9 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
               </Label>
               <Select
                 value={form.watch("priority")}
-                onValueChange={(value) => form.setValue("priority", value as TaskFormData["priority"])}
+                onValueChange={(value) =>
+                  form.setValue("priority", value as TaskFormData["priority"])
+                }
               >
                 <SelectTrigger className="w-full">
                   <SelectValue />
@@ -386,25 +488,41 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
                 <SelectContent>
                   <SelectItem value="low">
                     <div className="flex items-center gap-2">
-                      <span className={`font-medium ${getPriorityColor("low")}`}>●</span>
+                      <span
+                        className={`font-medium ${getPriorityColor("low")}`}
+                      >
+                        ●
+                      </span>
                       Low
                     </div>
                   </SelectItem>
                   <SelectItem value="medium">
                     <div className="flex items-center gap-2">
-                      <span className={`font-medium ${getPriorityColor("medium")}`}>●</span>
+                      <span
+                        className={`font-medium ${getPriorityColor("medium")}`}
+                      >
+                        ●
+                      </span>
                       Medium
                     </div>
                   </SelectItem>
                   <SelectItem value="high">
                     <div className="flex items-center gap-2">
-                      <span className={`font-medium ${getPriorityColor("high")}`}>●</span>
+                      <span
+                        className={`font-medium ${getPriorityColor("high")}`}
+                      >
+                        ●
+                      </span>
                       High
                     </div>
                   </SelectItem>
                   <SelectItem value="urgent">
                     <div className="flex items-center gap-2">
-                      <span className={`font-medium ${getPriorityColor("urgent")}`}>●</span>
+                      <span
+                        className={`font-medium ${getPriorityColor("urgent")}`}
+                      >
+                        ●
+                      </span>
                       Urgent
                     </div>
                   </SelectItem>
@@ -438,8 +556,12 @@ export function CreateTaskDialog({ projectId }: CreateTaskDialogProps) {
                   <Calendar
                     mode="single"
                     selected={form.watch("due_date")}
-                    onSelect={(date) => form.setValue("due_date", date, { shouldValidate: true })}
-                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    onSelect={(date) =>
+                      form.setValue("due_date", date, { shouldValidate: true })
+                    }
+                    disabled={(date) =>
+                      date < new Date(new Date().setHours(0, 0, 0, 0))
+                    }
                     initialFocus
                   />
                 </PopoverContent>

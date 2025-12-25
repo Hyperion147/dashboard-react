@@ -21,8 +21,12 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCompanyProjects } from "@/queries/projects/projectQueries";
-import { useCompanyTasks, useProjectTasks, useUpdateTaskStatus } from "@/queries/tasks/taskQueries";
+import { dummyProjects } from "@/data/dummy";
+import {
+  useCompanyTasks,
+  useProjectTasks,
+  useUpdateTaskStatus,
+} from "@/queries/tasks/taskQueries";
 import { CreateTaskDialog } from "@/components/projects/CreateTaskDialog";
 import type { Task } from "@/types/tasks/task";
 import { gsap } from "gsap";
@@ -42,25 +46,29 @@ export function TaskAssginment() {
   const headerRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
 
-  const { data: projects, isLoading: projectsLoading } = useCompanyProjects(companyId || "");
-  
+  // Mock useCompanyProjects
+  const { data: projects, isLoading: projectsLoading } = {
+    data: dummyProjects,
+    isLoading: false,
+  };
+
   // Get all project IDs for fetching all tasks
-  const projectIds = projects?.map(p => p.id) || [];
-  
+  const projectIds = projects?.map((p) => p.id) || [];
+
   // Fetch tasks based on selection
   const { data: allTasks, isLoading: allTasksLoading } = useCompanyTasks(
     companyId || "",
     projectIds
   );
-  const { data: projectTasks, isLoading: projectTasksLoading } = useProjectTasks(
-    selectedProject !== "all" ? selectedProject : ""
-  );
-  
+  const { data: projectTasks, isLoading: projectTasksLoading } =
+    useProjectTasks(selectedProject !== "all" ? selectedProject : "");
+
   const updateTaskStatusMutation = useUpdateTaskStatus();
 
   // Use the appropriate tasks based on selection
   const tasks = selectedProject === "all" ? allTasks : projectTasks;
-  const tasksLoading = selectedProject === "all" ? allTasksLoading : projectTasksLoading;
+  const tasksLoading =
+    selectedProject === "all" ? allTasksLoading : projectTasksLoading;
   const isLoading = projectsLoading || tasksLoading;
 
   // Filter tasks
@@ -71,11 +79,17 @@ export function TaskAssginment() {
       const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.assigned_to?.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.assigned_to?.last_name.toLowerCase().includes(searchTerm.toLowerCase());
+        task.assigned_to?.first_name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        task.assigned_to?.last_name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-      const matchesStatus = selectedStatus === "all" || task.status === selectedStatus;
-      const matchesPriority = selectedPriority === "all" || task.priority === selectedPriority;
+      const matchesStatus =
+        selectedStatus === "all" || task.status === selectedStatus;
+      const matchesPriority =
+        selectedPriority === "all" || task.priority === selectedPriority;
 
       return matchesSearch && matchesStatus && matchesPriority;
     });
@@ -95,12 +109,13 @@ export function TaskAssginment() {
     const now = new Date();
     return {
       total: tasks.length,
-      inProgress: tasks.filter((t) => 
-        t.status === "in_progress" || 
-        t.status === "developed" || 
-        t.status === "code_review" || 
-        t.status === "deployment" || 
-        t.status === "qa"
+      inProgress: tasks.filter(
+        (t) =>
+          t.status === "in_progress" ||
+          t.status === "developed" ||
+          t.status === "code_review" ||
+          t.status === "deployment" ||
+          t.status === "qa"
       ).length,
       completed: tasks.filter((t) => t.status === "done").length,
       overdue: tasks.filter(
@@ -177,7 +192,10 @@ export function TaskAssginment() {
 
   const handleStatusChange = async (taskId: string, newStatus: string) => {
     try {
-      await updateTaskStatusMutation.mutateAsync({ id: taskId, status: newStatus });
+      await updateTaskStatusMutation.mutateAsync({
+        id: taskId,
+        status: newStatus,
+      });
       toast.success("Task status updated");
     } catch (error) {
       toast.error("Failed to update task status");
@@ -355,11 +373,13 @@ export function TaskAssginment() {
             <FolderKanban className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-2">No tasks found</h3>
             <p className="text-muted-foreground mb-4">
-              {searchTerm || selectedStatus !== "all" || selectedPriority !== "all"
+              {searchTerm ||
+              selectedStatus !== "all" ||
+              selectedPriority !== "all"
                 ? "Try adjusting your filters"
                 : selectedProject === "all"
-                  ? "Select a project to view tasks"
-                  : "No tasks in this project yet"}
+                ? "Select a project to view tasks"
+                : "No tasks in this project yet"}
             </p>
             {selectedProject && selectedProject !== "all" && (
               <CreateTaskDialog projectId={selectedProject} />
@@ -369,7 +389,10 @@ export function TaskAssginment() {
       ) : (
         <div className="space-y-4">
           {filteredTasks.map((task) => (
-            <Card key={task.id} className="task-card hover:shadow-md transition-shadow">
+            <Card
+              key={task.id}
+              className="task-card hover:shadow-md transition-shadow"
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
@@ -379,7 +402,9 @@ export function TaskAssginment() {
                         {getStatusLabel(task.status)}
                       </Badge>
                       <span
-                        className={`text-xs px-2 py-1 rounded-md font-medium ${getPriorityColor(task.priority)}`}
+                        className={`text-xs px-2 py-1 rounded-md font-medium ${getPriorityColor(
+                          task.priority
+                        )}`}
                       >
                         {task.priority.toUpperCase()}
                       </span>
@@ -395,7 +420,9 @@ export function TaskAssginment() {
                   </div>
                   <Select
                     value={task.status}
-                    onValueChange={(value) => handleStatusChange(task.id, value)}
+                    onValueChange={(value) =>
+                      handleStatusChange(task.id, value)
+                    }
                     disabled={updateTaskStatusMutation.isPending}
                   >
                     <SelectTrigger className="w-60">
@@ -419,9 +446,12 @@ export function TaskAssginment() {
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Assigned to</p>
+                        <p className="text-xs text-muted-foreground">
+                          Assigned to
+                        </p>
                         <p className="font-medium">
-                          {task.assigned_to.first_name} {task.assigned_to.last_name}
+                          {task.assigned_to.first_name}{" "}
+                          {task.assigned_to.last_name}
                         </p>
                       </div>
                     </div>
@@ -440,7 +470,11 @@ export function TaskAssginment() {
                     <div>
                       <p className="text-xs text-muted-foreground">Due Date</p>
                       <p
-                        className={`font-medium ${isOverdue(task.due_date, task.status) ? "text-red-600" : ""}`}
+                        className={`font-medium ${
+                          isOverdue(task.due_date, task.status)
+                            ? "text-red-600"
+                            : ""
+                        }`}
                       >
                         {formatDate(task.due_date)}
                       </p>

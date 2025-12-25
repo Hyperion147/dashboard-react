@@ -69,7 +69,7 @@ export interface AuthResponse {
   };
 }
 
-export const loginAdmin = async (credentials: LoginCredentials): Promise<AuthResponse> => {
+export const loginAdmin = async (_credentials: LoginCredentials): Promise<AuthResponse> => {
     // Return dummy success
     return {
         success: true,
@@ -88,7 +88,7 @@ export const logoutAdmin = async (): Promise<void> => {
   return;
 };
 
-export const refreshToken = async (refreshToken: string): Promise<AuthResponse> => {
+export const refreshToken = async (_refreshToken: string): Promise<AuthResponse> => {
   return {
       success: true,
       code: 200,

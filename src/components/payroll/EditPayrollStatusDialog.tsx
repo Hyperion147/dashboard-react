@@ -25,7 +25,9 @@ interface EditPayrollStatusDialogProps {
   payroll: Payroll;
 }
 
-export function EditPayrollStatusDialog({ payroll }: EditPayrollStatusDialogProps) {
+export function EditPayrollStatusDialog({
+  payroll,
+}: EditPayrollStatusDialogProps) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Payroll["status"]>(payroll.status);
 
@@ -41,13 +43,15 @@ export function EditPayrollStatusDialog({ payroll }: EditPayrollStatusDialogProp
 
     try {
       await updatePayrollMutation.mutateAsync({
-        id: payroll.payroll_id,
+        id: payroll.payroll_id || payroll.id || "",
         status,
       });
       toast.success("Payroll status updated successfully");
       setOpen(false);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to update payroll status");
+      toast.error(
+        error?.response?.data?.message || "Failed to update payroll status"
+      );
     }
   };
 
@@ -70,7 +74,10 @@ export function EditPayrollStatusDialog({ payroll }: EditPayrollStatusDialogProp
             <Label htmlFor="status">
               Status <span className="text-destructive">*</span>
             </Label>
-            <Select value={status} onValueChange={(value) => setStatus(value as Payroll["status"])}>
+            <Select
+              value={status}
+              onValueChange={(value) => setStatus(value as Payroll["status"])}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
@@ -80,14 +87,17 @@ export function EditPayrollStatusDialog({ payroll }: EditPayrollStatusDialogProp
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground mt-2">
-              Current status: <span className="font-medium capitalize">{payroll.status}</span>
+              Current status:{" "}
+              <span className="font-medium capitalize">{payroll.status}</span>
             </p>
           </div>
 
           <div className="flex gap-4 pt-4 border-t">
             <Button
               type="submit"
-              disabled={updatePayrollMutation.isPending || status === payroll.status}
+              disabled={
+                updatePayrollMutation.isPending || status === payroll.status
+              }
               className="flex-1"
             >
               {updatePayrollMutation.isPending ? (

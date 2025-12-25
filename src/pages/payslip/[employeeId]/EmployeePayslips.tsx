@@ -26,7 +26,7 @@ export function EmployeePayslips() {
 
   const { data: payslips, isLoading, error } = useEmployeePayslips(empId);
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | undefined) => {
     const numAmount = Number(amount);
     if (isNaN(numAmount)) {
       return "$0.00";
@@ -145,8 +145,8 @@ export function EmployeePayslips() {
       {payslips && payslips.length > 0 ? (
         <div className="space-y-4">
           {payslips.map((payslip) => {
-            const paymentDate = payslip.payment_date 
-              ? new Date(payslip.payment_date) 
+            const paymentDate = payslip.payment_date
+              ? new Date(payslip.payment_date)
               : new Date();
             const isValidDate = !isNaN(paymentDate.getTime());
 
@@ -155,7 +155,8 @@ export function EmployeePayslips() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">
-                      Payslip - {isValidDate ? format(paymentDate, "MMMM yyyy") : "N/A"}
+                      Payslip -{" "}
+                      {isValidDate ? format(paymentDate, "MMMM yyyy") : "N/A"}
                     </CardTitle>
                     <Badge variant={getStatusColor(payslip.status)}>
                       {payslip.status}
@@ -172,55 +173,55 @@ export function EmployeePayslips() {
                         </p>
                       </div>
                       <p className="font-semibold">
-                        {isValidDate ? format(paymentDate, "MMM dd, yyyy") : "N/A"}
+                        {isValidDate
+                          ? format(paymentDate, "MMM dd, yyyy")
+                          : "N/A"}
                       </p>
                     </div>
 
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <DollarSign className="w-4 h-4 text-blue-600" />
-                      <p className="text-sm text-muted-foreground">
-                        Base Pay
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <DollarSign className="w-4 h-4 text-blue-600" />
+                        <p className="text-sm text-muted-foreground">
+                          Base Pay
+                        </p>
+                      </div>
+                      <p className="font-semibold text-blue-600">
+                        {formatCurrency(payslip.base_pay)}
                       </p>
                     </div>
-                    <p className="font-semibold text-blue-600">
-                      {formatCurrency(payslip.base_pay)}
-                    </p>
+
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <DollarSign className="w-4 h-4 text-green-600" />
+                        <p className="text-sm text-muted-foreground">
+                          Gross Pay
+                        </p>
+                      </div>
+                      <p className="font-semibold text-green-600">
+                        {formatCurrency(payslip.gross_pay)}
+                      </p>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <DollarSign className="w-4 h-4 text-purple-600" />
+                        <p className="text-sm text-muted-foreground">Net Pay</p>
+                      </div>
+                      <p className="font-semibold text-purple-600">
+                        {formatCurrency(payslip.net_pay)}
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <DollarSign className="w-4 h-4 text-green-600" />
-                      <p className="text-sm text-muted-foreground">
-                        Gross Pay
-                      </p>
-                    </div>
-                    <p className="font-semibold text-green-600">
-                      {formatCurrency(payslip.gross_pay)}
-                    </p>
+                  <div className="flex justify-end mt-4 pt-4 border-t">
+                    <Button variant="outline" size="sm">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download PDF
+                    </Button>
                   </div>
-
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <DollarSign className="w-4 h-4 text-purple-600" />
-                      <p className="text-sm text-muted-foreground">
-                        Net Pay
-                      </p>
-                    </div>
-                    <p className="font-semibold text-purple-600">
-                      {formatCurrency(payslip.net_pay)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex justify-end mt-4 pt-4 border-t">
-                  <Button variant="outline" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download PDF
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
             );
           })}
         </div>

@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { useCreateProject } from "@/queries/projects/projectQueries";
+// import { useCreateProject } from "@/queries/projects/projectQueries";
 import { useCompanyEmployees } from "@/queries/employee/employee";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { gsap } from "gsap";
@@ -39,7 +39,12 @@ export function CreateProject() {
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
-  const createProjectMutation = useCreateProject();
+  const createProjectMutation = {
+    mutateAsync: async (_data: any) => {
+      await new Promise((r) => setTimeout(r, 1000));
+    },
+    isPending: false,
+  };
   const { data: employees } = useCompanyEmployees(companyId || "");
 
   useEffect(() => {
@@ -67,7 +72,14 @@ export function CreateProject() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.code || !formData.description || !formData.manager_id || !startDate || !endDate) {
+    if (
+      !formData.name ||
+      !formData.code ||
+      !formData.description ||
+      !formData.manager_id ||
+      !startDate ||
+      !endDate
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -105,7 +117,9 @@ export function CreateProject() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold">Create New Project</h1>
-          <p className="text-muted-foreground">Add a new project to your company</p>
+          <p className="text-muted-foreground">
+            Add a new project to your company
+          </p>
         </div>
       </div>
 
@@ -174,7 +188,8 @@ export function CreateProject() {
                   <SelectContent>
                     {employees?.map((employee) => (
                       <SelectItem key={employee.id} value={employee.id}>
-                        {employee.first_name} {employee.last_name} ({employee.email})
+                        {employee.first_name} {employee.last_name} (
+                        {employee.email})
                       </SelectItem>
                     ))}
                   </SelectContent>

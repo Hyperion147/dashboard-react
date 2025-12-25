@@ -108,7 +108,7 @@ export const useDeleteAttendance = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (attendanceId: string) => {
+    mutationFn: async (_attendanceId: string) => {
       return;
     },
     onSuccess: () => {

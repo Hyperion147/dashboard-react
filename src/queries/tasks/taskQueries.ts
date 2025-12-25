@@ -119,7 +119,7 @@ export const useDeleteTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (taskId: string) => {
+    mutationFn: async (_taskId: string) => {
       return;
     },
     onSuccess: () => {

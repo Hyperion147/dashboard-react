@@ -17,7 +17,7 @@ export function useDepartmentTeams(departmentId: string) {
 }
 
 // Update team
-export function useUpdateDepartmentTeam(teamId: string) {
+export function useUpdateDepartmentTeam(_teamId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -53,7 +53,7 @@ export function useDeleteDepartmentTeam(departmentId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (teamId: string) => {
+    mutationFn: async (_teamId: string) => {
       return;
     },
     onSuccess: () => {

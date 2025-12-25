@@ -19,41 +19,42 @@ import {
   FolderKanban,
   MoreVertical,
 } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useCompanyProjects, useUpdateProjectStatus } from "@/queries/projects/projectQueries";
+import { Link } from "react-router-dom";
+// import { useAuth } from "@/contexts/AuthContext";
+import { dummyProjects } from "@/data/dummy";
 import type { Project } from "@/types/projects/project";
 import { gsap } from "gsap";
 import toast from "react-hot-toast";
 
 export function ProjectManagement() {
-  const params = useParams<{ companyId: string }>();
-  const { companyId: authCompanyId } = useAuth();
-  const companyId = params.companyId || authCompanyId;
+  // const params = useParams<{ companyId: string }>();
+  // const { companyId: authCompanyId } = useAuth();
+  // const _companyId = params.companyId || authCompanyId;
 
   const [searchTerm, setSearchTerm] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data: projects,
-    isLoading,
-    error,
-    refetch,
-  } = useCompanyProjects(companyId || "");
+  // Use dummy data directly
+  const projects = dummyProjects;
+  const isLoading = false;
+  const error = null;
+  const refetch = () => {};
 
-  const updateStatusMutation = useUpdateProjectStatus();
+  // Mock mutation
+  const updateStatusMutation = { isPending: false };
 
-  const handleStatusChange = async (projectId: string, newStatus: Project["status"]) => {
+  const handleStatusChange = async (
+    _projectId: string,
+    _newStatus: Project["status"]
+  ) => {
+    // Simulate API call
     try {
-      await updateStatusMutation.mutateAsync({
-        id: projectId,
-        status: newStatus,
-      });
+      await new Promise((resolve) => setTimeout(resolve, 500));
       toast.success("Project status updated successfully");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to update project status");
+      toast.error("Failed to update project status");
     }
   };
 
@@ -221,7 +222,9 @@ export function ProjectManagement() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">{projectStats.inProgress}</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {projectStats.inProgress}
+                </p>
                 <p className="text-sm text-muted-foreground">In Progress</p>
               </div>
             </CardContent>
@@ -229,7 +232,9 @@ export function ProjectManagement() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-2xl font-bold text-green-600">{projectStats.completed}</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {projectStats.completed}
+                </p>
                 <p className="text-sm text-muted-foreground">Completed</p>
               </div>
             </CardContent>
@@ -237,7 +242,9 @@ export function ProjectManagement() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-2xl font-bold text-yellow-600">{projectStats.onHold}</p>
+                <p className="text-2xl font-bold text-yellow-600">
+                  {projectStats.onHold}
+                </p>
                 <p className="text-sm text-muted-foreground">On Hold</p>
               </div>
             </CardContent>
@@ -245,7 +252,9 @@ export function ProjectManagement() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-2xl font-bold text-purple-600">{projectStats.planning}</p>
+                <p className="text-2xl font-bold text-purple-600">
+                  {projectStats.planning}
+                </p>
                 <p className="text-sm text-muted-foreground">Planning</p>
               </div>
             </CardContent>
@@ -274,7 +283,7 @@ export function ProjectManagement() {
               <div className="flex-1">
                 <p className="font-medium">Error loading projects</p>
                 <p className="text-sm text-muted-foreground">
-                  {error.message || "Failed to fetch project data"}
+                  "Failed to fetch project data"
                 </p>
               </div>
               <Button variant="outline" onClick={() => refetch()}>
@@ -332,7 +341,10 @@ export function ProjectManagement() {
                             e.stopPropagation();
                             handleStatusChange(project.id, "planning");
                           }}
-                          disabled={project.status === "planning" || updateStatusMutation.isPending}
+                          disabled={
+                            project.status === "planning" ||
+                            updateStatusMutation.isPending
+                          }
                         >
                           Mark as Planning
                         </DropdownMenuItem>
@@ -341,7 +353,10 @@ export function ProjectManagement() {
                             e.stopPropagation();
                             handleStatusChange(project.id, "in_progress");
                           }}
-                          disabled={project.status === "in_progress" || updateStatusMutation.isPending}
+                          disabled={
+                            project.status === "in_progress" ||
+                            updateStatusMutation.isPending
+                          }
                         >
                           Mark as In Progress
                         </DropdownMenuItem>
@@ -350,7 +365,10 @@ export function ProjectManagement() {
                             e.stopPropagation();
                             handleStatusChange(project.id, "on_hold");
                           }}
-                          disabled={project.status === "on_hold" || updateStatusMutation.isPending}
+                          disabled={
+                            project.status === "on_hold" ||
+                            updateStatusMutation.isPending
+                          }
                         >
                           Mark as On Hold
                         </DropdownMenuItem>
@@ -359,7 +377,10 @@ export function ProjectManagement() {
                             e.stopPropagation();
                             handleStatusChange(project.id, "completed");
                           }}
-                          disabled={project.status === "completed" || updateStatusMutation.isPending}
+                          disabled={
+                            project.status === "completed" ||
+                            updateStatusMutation.isPending
+                          }
                         >
                           Mark as Completed
                         </DropdownMenuItem>
@@ -368,7 +389,10 @@ export function ProjectManagement() {
                             e.stopPropagation();
                             handleStatusChange(project.id, "cancelled");
                           }}
-                          disabled={project.status === "cancelled" || updateStatusMutation.isPending}
+                          disabled={
+                            project.status === "cancelled" ||
+                            updateStatusMutation.isPending
+                          }
                           className="text-destructive"
                         >
                           Mark as Cancelled

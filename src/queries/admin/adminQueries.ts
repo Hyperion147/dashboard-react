@@ -89,7 +89,7 @@ export interface UpcomingBirthday {
 }
 
 // Get dashboard stats
-export const getDashboardStats = async (companyId: string): Promise<DashboardStats> => {
+export const getDashboardStats = async (_companyId: string): Promise<DashboardStats> => {
   return {
     totalEmployees: 25,
     presentToday: 23,
@@ -103,7 +103,7 @@ export const getDashboardStats = async (companyId: string): Promise<DashboardSta
 };
 
 // Get employee stats
-export const getEmployeeStats = async (companyId: string): Promise<EmployeeStats> => {
+export const getEmployeeStats = async (_companyId: string): Promise<EmployeeStats> => {
   return {
     total: 25,
     active: 24,
@@ -120,7 +120,7 @@ export const getEmployeeStats = async (companyId: string): Promise<EmployeeStats
 };
 
 // Get project and task stats
-export const getProjectTaskStats = async (companyId: string): Promise<ProjectTaskStats> => {
+export const getProjectTaskStats = async (_companyId: string): Promise<ProjectTaskStats> => {
   return {
     totalProjects: 5,
     activeProjects: 3,
@@ -133,7 +133,7 @@ export const getProjectTaskStats = async (companyId: string): Promise<ProjectTas
 };
 
 // Get attendance stats
-export const getAttendanceStats = async (companyId: string): Promise<AttendanceStats> => {
+export const getAttendanceStats = async (_companyId: string): Promise<AttendanceStats> => {
   return {
     totalEmployees: 25,
     presentToday: 20,
@@ -145,7 +145,7 @@ export const getAttendanceStats = async (companyId: string): Promise<AttendanceS
 };
 
 // Get recent activity
-export const getRecentActivity = async (companyId: string, page = 1, limit = 10): Promise<RecentActivity[]> => {
+export const getRecentActivity = async (_companyId: string, _page = 1, _limit = 10): Promise<RecentActivity[]> => {
   return [
     { id: "1", employee: "John Doe", action: "Clocked in", status: "present", time: "09:00 AM", timestamp: new Date().toISOString() },
     { id: "2", employee: "Alice Smith", action: "Clocked in", status: "late", time: "09:15 AM", timestamp: new Date().toISOString() },
@@ -154,7 +154,7 @@ export const getRecentActivity = async (companyId: string, page = 1, limit = 10)
 };
 
 // Get pending leaves
-export const getPendingLeaves = async (companyId: string): Promise<PendingLeave[]> => {
+export const getPendingLeaves = async (_companyId: string): Promise<PendingLeave[]> => {
   return [
     { id: "1", employeeName: "Charlie Brown", leaveType: "Sick Leave", startDate: "2024-01-10", endDate: "2024-01-12", days: 3, reason: "Flu", status: "pending" },
     { id: "2", employeeName: "Diana Prince", leaveType: "Vacation", startDate: "2024-02-01", endDate: "2024-02-10", days: 10, reason: "Vacation", status: "pending" },
@@ -162,7 +162,7 @@ export const getPendingLeaves = async (companyId: string): Promise<PendingLeave[
 };
 
 // Get upcoming deadlines
-export const getUpcomingDeadlines = async (companyId: string, days = 30): Promise<UpcomingDeadline[]> => {
+export const getUpcomingDeadlines = async (_companyId: string, _days = 30): Promise<UpcomingDeadline[]> => {
   return [
     { id: "1", projectName: "Project Alpha", taskName: "Frontend Setup", deadline: "2024-01-15", assignee: "John Doe", priority: "high", status: "on-track" },
     { id: "2", projectName: "Project Beta", taskName: "Database Schema", deadline: "2024-01-20", assignee: "Bob Johnson", priority: "medium", status: "at-risk" },
@@ -170,24 +170,24 @@ export const getUpcomingDeadlines = async (companyId: string, days = 30): Promis
 };
 
 // Get upcoming birthdays/anniversaries
-export const getUpcomingBirthdays = async (userId: string): Promise<UpcomingBirthday[]> => {
+export const getUpcomingBirthdays = async (_userId: string): Promise<UpcomingBirthday[]> => {
   return [
      { id: "1", employeeName: "John Doe", department: "Engineering", date: "2024-01-20", daysUntil: 5 },
   ];
 };
 
 // Get all company employees
-export const getAllCompanyEmployees = async (companyId: string) => {
+export const getAllCompanyEmployees = async (_companyId: string) => {
   return [];
 };
 
 // Get all company tasks
-export const getAllCompanyTasks = async (companyId: string) => {
+export const getAllCompanyTasks = async (_companyId: string) => {
   return [];
 };
 
 // Get resource allocation
-export const getResourceAllocation = async (companyId: string) => {
+export const getResourceAllocation = async (_companyId: string) => {
   return [
       { name: "Engineering", allocated: 80, total: 100 },
       { name: "Design", allocated: 50, total: 100 },

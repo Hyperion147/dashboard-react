@@ -37,7 +37,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useProject, useProjectTeams, useAssignTeamToProject, useRemoveTeamFromProject, useUpdateProject } from "@/queries/projects/projectQueries";
+import { dummyProjects } from "@/data/dummy";
 import { useDepartmentTeams } from "@/queries/teams/teamQueries";
 import { useCompanyDepartments } from "@/queries/departments/departmentQueries";
 import type { Project } from "@/types/projects/project";
@@ -54,20 +54,49 @@ export function ProjectDetail() {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [removeConfirm, setRemoveConfirm] = useState<{ id: string; name: string } | null>(null);
+  const [removeConfirm, setRemoveConfirm] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [isEditingProject, setIsEditingProject] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
-  const { data: project, isLoading, error, refetch } = useProject(projectId);
-  const { data: projectTeams, isLoading: teamsLoading } = useProjectTeams(projectId);
-  const { data: departments } = useCompanyDepartments(project?.company_id || "");
+  // Use dummy data
+  const project =
+    dummyProjects.find((p) => p.id === projectId) || dummyProjects[0];
+  const isLoading = false;
+  const error = null;
+  const refetch = () => {};
+
+  const projectTeams: any[] = [];
+  const teamsLoading = false;
+
+  const { data: departments } = useCompanyDepartments(
+    project?.company_id || ""
+  );
   const { data: departmentTeams } = useDepartmentTeams(selectedDepartment);
-  
-  const assignTeamMutation = useAssignTeamToProject();
-  const removeTeamMutation = useRemoveTeamFromProject();
-  const updateProjectMutation = useUpdateProject();
+
+  // Mock mutations
+  const assignTeamMutation = {
+    mutateAsync: async (_data: any) => {
+      await new Promise((r) => setTimeout(r, 500));
+    },
+    isPending: false,
+  };
+  const removeTeamMutation = {
+    mutateAsync: async (_id: string) => {
+      await new Promise((r) => setTimeout(r, 500));
+    },
+    isPending: false,
+  };
+  const updateProjectMutation = {
+    mutateAsync: async (_data: any) => {
+      await new Promise((r) => setTimeout(r, 500));
+    },
+    isPending: false,
+  };
 
   const projectForm = useForm({
     defaultValues: {
@@ -86,7 +115,9 @@ export function ProjectDetail() {
         name: project.name,
         description: project.description,
         status: project.status,
-        start_date: project.start_date ? new Date(project.start_date) : undefined,
+        start_date: project.start_date
+          ? new Date(project.start_date)
+          : undefined,
         end_date: project.end_date ? new Date(project.end_date) : undefined,
       });
     }
@@ -129,8 +160,8 @@ export function ProjectDetail() {
       await assignTeamMutation.mutateAsync({
         project_id: projectId,
         team_id: selectedTeam,
-        start_date: startDate.toISOString().split('T')[0],
-        end_date: endDate.toISOString().split('T')[0],
+        start_date: startDate.toISOString().split("T")[0],
+        end_date: endDate.toISOString().split("T")[0],
         status: "assigned",
       });
       toast.success("Team assigned successfully");
@@ -173,13 +204,14 @@ export function ProjectDetail() {
         name: data.name.trim(),
         description: data.description.trim(),
         status: data.status,
-        start_date: data.start_date.toISOString().split('T')[0],
-        end_date: data.end_date.toISOString().split('T')[0],
+        start_date: data.start_date.toISOString().split("T")[0],
+        end_date: data.end_date.toISOString().split("T")[0],
       });
       toast.success("Project updated successfully!");
       setIsEditingProject(false);
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || "Failed to update project";
+      const errorMessage =
+        error?.response?.data?.message || "Failed to update project";
       toast.error(errorMessage);
     }
   });
@@ -190,7 +222,9 @@ export function ProjectDetail() {
         name: project.name,
         description: project.description,
         status: project.status,
-        start_date: project.start_date ? new Date(project.start_date) : undefined,
+        start_date: project.start_date
+          ? new Date(project.start_date)
+          : undefined,
         end_date: project.end_date ? new Date(project.end_date) : undefined,
       });
     }
@@ -246,7 +280,7 @@ export function ProjectDetail() {
               <div className="flex-1">
                 <p className="font-medium">Error loading project</p>
                 <p className="text-sm text-muted-foreground">
-                  {error?.message || "Failed to fetch project data"}
+                  "Failed to fetch project data"
                 </p>
               </div>
               <Button variant="outline" onClick={() => refetch()}>
@@ -343,7 +377,10 @@ export function ProjectDetail() {
                   </div>
 
                   <div>
-                    <Label htmlFor="description" className="text-sm font-medium">
+                    <Label
+                      htmlFor="description"
+                      className="text-sm font-medium"
+                    >
                       Description <span className="text-destructive">*</span>
                     </Label>
                     <Textarea
@@ -371,7 +408,12 @@ export function ProjectDetail() {
                     </Label>
                     <Select
                       value={projectForm.watch("status")}
-                      onValueChange={(value) => projectForm.setValue("status", value as Project["status"])}
+                      onValueChange={(value) =>
+                        projectForm.setValue(
+                          "status",
+                          value as Project["status"]
+                        )
+                      }
                     >
                       <SelectTrigger className="mt-1 w-full">
                         <SelectValue />
@@ -393,7 +435,9 @@ export function ProjectDetail() {
                       </Label>
                       <DatePicker
                         date={projectForm.watch("start_date")}
-                        onDateChange={(date) => projectForm.setValue("start_date", date)}
+                        onDateChange={(date) =>
+                          projectForm.setValue("start_date", date)
+                        }
                         placeholder="Select start date"
                         className="mt-1"
                       />
@@ -404,7 +448,9 @@ export function ProjectDetail() {
                       </Label>
                       <DatePicker
                         date={projectForm.watch("end_date")}
-                        onDateChange={(date) => projectForm.setValue("end_date", date)}
+                        onDateChange={(date) =>
+                          projectForm.setValue("end_date", date)
+                        }
                         placeholder="Select end date"
                         className="mt-1"
                         disabled={!projectForm.watch("start_date")}
@@ -428,7 +474,9 @@ export function ProjectDetail() {
                       </h3>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm">{formatDate(project.start_date)}</span>
+                        <span className="text-sm">
+                          {formatDate(project.start_date)}
+                        </span>
                       </div>
                     </div>
                     <div>
@@ -437,7 +485,9 @@ export function ProjectDetail() {
                       </h3>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm">{formatDate(project.end_date)}</span>
+                        <span className="text-sm">
+                          {formatDate(project.end_date)}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -462,7 +512,6 @@ export function ProjectDetail() {
               )}
             </CardContent>
           </Card>
-
         </div>
         <div className="space-y-6">
           <Card className="detail-card">
@@ -472,18 +521,24 @@ export function ProjectDetail() {
             <CardContent className="space-y-4">
               <div>
                 <p className="text-sm text-muted-foreground">Total Teams</p>
-                <p className="text-2xl font-bold">{projectTeams?.length || 0}</p>
+                <p className="text-2xl font-bold">
+                  {projectTeams?.length || 0}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-                <Badge variant={getStatusColor(project.status)} className="mt-1">
+                <Badge
+                  variant={getStatusColor(project.status)}
+                  className="mt-1"
+                >
                   {project.status.replace("_", " ")}
                 </Badge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Duration</p>
                 <p className="text-sm font-medium mt-1">
-                  {formatDate(project.start_date)} - {formatDate(project.end_date)}
+                  {formatDate(project.start_date)} -{" "}
+                  {formatDate(project.end_date)}
                 </p>
               </div>
             </CardContent>
@@ -491,178 +546,199 @@ export function ProjectDetail() {
         </div>
       </div>
       <div className="w-full flex flex-col gap-4">
-          <Card className="detail-card">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Assigned Teams</CardTitle>
-                <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button size="sm" className="gap-2">
-                      <Plus className="w-4 h-4" />
-                      Assign Team
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Assign Team to Project</DialogTitle>
-                      <DialogDescription>
-                        Select a team and set the assignment period
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4">
+        <Card className="detail-card">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Assigned Teams</CardTitle>
+              <Dialog
+                open={isAssignDialogOpen}
+                onOpenChange={setIsAssignDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button size="sm" className="gap-2">
+                    <Plus className="w-4 h-4" />
+                    Assign Team
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Assign Team to Project</DialogTitle>
+                    <DialogDescription>
+                      Select a team and set the assignment period
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label>
+                        Department <span className="text-destructive">*</span>
+                      </Label>
+                      <Select
+                        value={selectedDepartment}
+                        onValueChange={(value) => {
+                          setSelectedDepartment(value);
+                          setSelectedTeam(""); // Reset team when department changes
+                        }}
+                      >
+                        <SelectTrigger className="mt-1 w-full">
+                          <SelectValue placeholder="Select department" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departments && departments.length > 0 ? (
+                            departments
+                              .filter((dept) => dept.status === "active")
+                              .map((dept) => (
+                                <SelectItem key={dept.id} value={dept.id}>
+                                  {dept.name} ({dept.code})
+                                </SelectItem>
+                              ))
+                          ) : (
+                            <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                              No departments available
+                            </div>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {selectedDepartment && (
                       <div>
-                        <Label>Department <span className="text-destructive">*</span></Label>
+                        <Label>
+                          Team <span className="text-destructive">*</span>
+                        </Label>
                         <Select
-                          value={selectedDepartment}
-                          onValueChange={(value) => {
-                            setSelectedDepartment(value);
-                            setSelectedTeam(""); // Reset team when department changes
-                          }}
+                          value={selectedTeam}
+                          onValueChange={setSelectedTeam}
                         >
                           <SelectTrigger className="mt-1 w-full">
-                            <SelectValue placeholder="Select department" />
+                            <SelectValue placeholder="Select team" />
                           </SelectTrigger>
                           <SelectContent>
-                            {departments && departments.length > 0 ? (
-                              departments
-                                .filter((dept) => dept.status === "active")
-                                .map((dept) => (
-                                  <SelectItem key={dept.id} value={dept.id}>
-                                    {dept.name} ({dept.code})
+                            {departmentTeams && departmentTeams.length > 0 ? (
+                              departmentTeams
+                                .filter((team) => team.status === "active")
+                                .map((team) => (
+                                  <SelectItem key={team.id} value={team.id}>
+                                    {team.name} ({team.code})
                                   </SelectItem>
                                 ))
                             ) : (
                               <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                                No departments available
+                                No teams available in this department
                               </div>
                             )}
                           </SelectContent>
                         </Select>
                       </div>
+                    )}
 
-                      {selectedDepartment && (
-                        <div>
-                          <Label>Team <span className="text-destructive">*</span></Label>
-                          <Select value={selectedTeam} onValueChange={setSelectedTeam}>
-                            <SelectTrigger className="mt-1 w-full">
-                              <SelectValue placeholder="Select team" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {departmentTeams && departmentTeams.length > 0 ? (
-                                departmentTeams
-                                  .filter((team) => team.status === "active")
-                                  .map((team) => (
-                                    <SelectItem key={team.id} value={team.id}>
-                                      {team.name} ({team.code})
-                                    </SelectItem>
-                                  ))
-                              ) : (
-                                <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                                  No teams available in this department
-                                </div>
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      )}
-
-                      <div>
-                        <Label>Start Date <span className="text-destructive">*</span></Label>
-                        <DatePicker
-                          date={startDate}
-                          onDateChange={setStartDate}
-                          placeholder="Select start date"
-                          className="mt-1"
-                        />
-                      </div>
-
-                      <div>
-                        <Label>End Date <span className="text-destructive">*</span></Label>
-                        <DatePicker
-                          date={endDate}
-                          onDateChange={setEndDate}
-                          placeholder="Select end date"
-                          className="mt-1"
-                          disabled={!startDate}
-                        />
-                      </div>
-
-                      <Button
-                        onClick={handleAssignTeam}
-                        className="w-full"
-                        disabled={assignTeamMutation.isPending}
-                      >
-                        {assignTeamMutation.isPending ? "Assigning..." : "Assign Team"}
-                      </Button>
+                    <div>
+                      <Label>
+                        Start Date <span className="text-destructive">*</span>
+                      </Label>
+                      <DatePicker
+                        date={startDate}
+                        onDateChange={setStartDate}
+                        placeholder="Select start date"
+                        className="mt-1"
+                      />
                     </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {teamsLoading ? (
-                <div className="space-y-3">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <Skeleton key={i} className="h-20 w-full" />
-                  ))}
-                </div>
-              ) : projectTeams && projectTeams.length > 0 ? (
-                <div className="space-y-3">
-                  {projectTeams.map((pt) => (
-                    <Card key={pt.id} className="border">
-                      <CardContent>
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Link 
-                                to={`/teams/${pt.team_id}`}
-                                className="font-medium hover:text-primary transition-colors"
-                              >
-                                {pt.team?.name}
-                              </Link>
-                              <Badge variant="outline" className="text-xs">
-                                {pt.status}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground mb-2">
-                              {pt.team?.code}
-                            </p>
-                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                              <span>{formatDate(pt.start_date)}</span>
-                              <span>→</span>
-                              <span>{formatDate(pt.end_date)}</span>
-                            </div>
-                            <Link 
-                              to={`/teams/${pt.team_id}`}
-                              className="text-xs text-primary hover:underline mt-2 inline-flex items-center gap-1"
-                            >
-                              View team details
-                              <ArrowLeft className="w-3 h-3 rotate-180" />
-                            </Link>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleRemoveTeamClick(pt.id, pt.team?.name || "")}
-                            disabled={removeTeamMutation.isPending}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Users className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p>No teams assigned yet</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
 
-          <ProjectTasksSection projectId={projectId} companyId={project.company_id} />
+                    <div>
+                      <Label>
+                        End Date <span className="text-destructive">*</span>
+                      </Label>
+                      <DatePicker
+                        date={endDate}
+                        onDateChange={setEndDate}
+                        placeholder="Select end date"
+                        className="mt-1"
+                        disabled={!startDate}
+                      />
+                    </div>
+
+                    <Button
+                      onClick={handleAssignTeam}
+                      className="w-full"
+                      disabled={assignTeamMutation.isPending}
+                    >
+                      {assignTeamMutation.isPending
+                        ? "Assigning..."
+                        : "Assign Team"}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {teamsLoading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} className="h-20 w-full" />
+                ))}
+              </div>
+            ) : projectTeams && projectTeams.length > 0 ? (
+              <div className="space-y-3">
+                {projectTeams.map((pt) => (
+                  <Card key={pt.id} className="border">
+                    <CardContent>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Link
+                              to={`/teams/${pt.team_id}`}
+                              className="font-medium hover:text-primary transition-colors"
+                            >
+                              {pt.team?.name}
+                            </Link>
+                            <Badge variant="outline" className="text-xs">
+                              {pt.status}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            {pt.team?.code}
+                          </p>
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <span>{formatDate(pt.start_date)}</span>
+                            <span>→</span>
+                            <span>{formatDate(pt.end_date)}</span>
+                          </div>
+                          <Link
+                            to={`/teams/${pt.team_id}`}
+                            className="text-xs text-primary hover:underline mt-2 inline-flex items-center gap-1"
+                          >
+                            View team details
+                            <ArrowLeft className="w-3 h-3 rotate-180" />
+                          </Link>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() =>
+                            handleRemoveTeamClick(pt.id, pt.team?.name || "")
+                          }
+                          disabled={removeTeamMutation.isPending}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                <p>No teams assigned yet</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <ProjectTasksSection
+          projectId={projectId}
+          companyId={project.company_id}
+        />
       </div>
 
       <ConfirmDialog

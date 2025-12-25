@@ -23,7 +23,8 @@ import {
   FolderKanban,
 } from "lucide-react";
 import { useTeam, useUpdateTeamStatus } from "@/queries/teams/teamQueries";
-import { useTeamProjects } from "@/queries/projects/projectQueries";
+// import { useTeamProjects } from "@/queries/projects/projectQueries";
+
 import { useDepartment } from "@/queries/departments/departmentQueries";
 import { AddTeamMemberDialog } from "@/components/teams/AddTeamMemberDialog";
 import type { Team } from "@/types/projects/project";
@@ -39,18 +40,19 @@ export function TeamDetail() {
 
   const { data: team, isLoading, error, refetch } = useTeam(teamId);
   const updateStatusMutation = useUpdateTeamStatus();
-  
+
   // Extract members from team data
-  const employees = team?.members?.map(member => ({
-    id: member.employee.id,
-    idd: member.employee.idd,
-    first_name: member.employee.first_name,
-    last_name: member.employee.last_name,
-    email: member.employee.email,
-    job_title: member.job_title,
-    designation: member.designation,
-    level: member.level,
-  })) || [];
+  const employees =
+    team?.members?.map((member) => ({
+      id: member.employee.id,
+      idd: member.employee.idd,
+      first_name: member.employee.first_name,
+      last_name: member.employee.last_name,
+      email: member.employee.email,
+      job_title: member.job_title,
+      designation: member.designation,
+      level: member.level,
+    })) || [];
 
   const handleStatusChange = async (newStatus: Team["status"]) => {
     try {
@@ -60,18 +62,21 @@ export function TeamDetail() {
       });
       toast.success("Team status updated successfully");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to update team status");
+      toast.error(
+        error?.response?.data?.message || "Failed to update team status"
+      );
     }
   };
-  
+
   // Get department details to access company_id
   const { data: department } = useDepartment(team?.department_id || "");
-  
+
   const { companyId: authCompanyId } = useAuth();
-  const { data: projects, isLoading: projectsLoading } = useTeamProjects(
-    teamId,
-    department?.company_id || authCompanyId || ""
-  );
+  // Mock useTeamProjects
+  const { data: projects, isLoading: projectsLoading } = {
+    data: [],
+    isLoading: false,
+  };
 
   const getInitials = (firstName: string, lastName: string): string => {
     const first = firstName?.charAt(0)?.toUpperCase() || "";
@@ -79,9 +84,7 @@ export function TeamDetail() {
     return first + last || "NA";
   };
 
-  const getStatusColor = (
-    status: Team["status"]
-  ): "default" | "secondary" => {
+  const getStatusColor = (status: Team["status"]): "default" | "secondary" => {
     return status === "active" ? "default" : "secondary";
   };
 
@@ -160,9 +163,7 @@ export function TeamDetail() {
           <div className="flex items-center gap-3">
             <Users className="w-6 h-6 text-primary" />
             <h1 className="text-2xl font-bold">{team.name}</h1>
-            <Badge variant={getStatusColor(team.status)}>
-              {team.status}
-            </Badge>
+            <Badge variant={getStatusColor(team.status)}>{team.status}</Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -172,13 +173,17 @@ export function TeamDetail() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => handleStatusChange("active")}
-                  disabled={team.status === "active" || updateStatusMutation.isPending}
+                  disabled={
+                    team.status === "active" || updateStatusMutation.isPending
+                  }
                 >
                   Mark as Active
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => handleStatusChange("inactive")}
-                  disabled={team.status === "inactive" || updateStatusMutation.isPending}
+                  disabled={
+                    team.status === "inactive" || updateStatusMutation.isPending
+                  }
                   className="text-destructive"
                 >
                   Mark as Inactive
@@ -265,8 +270,8 @@ export function TeamDetail() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Team Members ({employees.length})</CardTitle>
-                <AddTeamMemberDialog 
-                  teamId={teamId} 
+                <AddTeamMemberDialog
+                  teamId={teamId}
                   companyId={department?.company_id || authCompanyId || ""}
                   currentMembers={employees}
                 />
@@ -288,9 +293,15 @@ export function TeamDetail() {
                     >
                       <div className="flex items-center gap-3">
                         <Avatar>
-                          <AvatarImage src="/placeholder.svg" alt={`${employee.first_name} ${employee.last_name}`} />
+                          <AvatarImage
+                            src="/placeholder.svg"
+                            alt={`${employee.first_name} ${employee.last_name}`}
+                          />
                           <AvatarFallback>
-                            {getInitials(employee.first_name, employee.last_name)}
+                            {getInitials(
+                              employee.first_name,
+                              employee.last_name
+                            )}
                           </AvatarFallback>
                         </Avatar>
                         <div>

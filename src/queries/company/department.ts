@@ -30,7 +30,7 @@ export function useCreateDepartment(companyId: string) {
 }
 
 // Update department
-export function useUpdateCompanyDepartment(departmentId: string, companyId: string) {
+export function useUpdateCompanyDepartment(_departmentId: string, companyId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -48,7 +48,7 @@ export function useDeleteDepartment(companyId: string) {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (departmentId: string) => {
+    mutationFn: async (_departmentId: string) => {
       return;
     },
     onSuccess: () => {

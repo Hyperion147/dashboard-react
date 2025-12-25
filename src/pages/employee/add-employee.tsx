@@ -90,7 +90,7 @@ export default function AddEmployeePage() {
     }
   }, [watchDepartment]);
 
-  const onSubmit = async (data: EmployeeFormData) => {
+  const onSubmit = async (_data: EmployeeFormData) => {
     try {
       setIsSubmitting(true);
 
@@ -103,18 +103,18 @@ export default function AddEmployeePage() {
       }
 
       // Convert Date objects to ISO strings for API
-      const formattedData = {
-        ...data,
-        company_id: companyId,
-        doj:
-          data.doj instanceof Date
-            ? data.doj.toISOString().split("T")[0]
-            : data.doj,
-        dob:
-          data.dob instanceof Date
-            ? data.dob.toISOString().split("T")[0]
-            : data.dob,
-      };
+      // const formattedData = {
+      //   ...data,
+      //   company_id: companyId,
+      //   doj:
+      //     data.doj instanceof Date
+      //       ? data.doj.toISOString().split("T")[0]
+      //       : data.doj,
+      //   dob:
+      //     data.dob instanceof Date
+      //       ? data.dob.toISOString().split("T")[0]
+      //       : data.dob,
+      // };
 
       // Create employee via API
       // Create employee via API - MOCK

@@ -23,6 +23,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { CompanyPageSkeleton } from "@/components/custom/skeletons/company-skeleton";
 import NotFound from "@/components/custom/skeletons/NotFound";
+import type { CompanyFormData } from "@/types/company/main-types";
 
 export default function CompanyPage() {
   const params = useParams<{ id: string }>();
@@ -33,32 +34,39 @@ export default function CompanyPage() {
   const updateMutation = useUpdateCompanyDetail(id || "");
   const [editMode, setEditMode] = useState(false);
 
-  const form = useForm({
-    defaultValues: company ?? {
-      idd: "",
-      name: "",
-      description: "",
-      phone: "",
-      email: "",
-      website: "",
-      zone: "",
-      type: "private",
-      status: "active",
-      address_1: "",
-      address_2: "",
-      city: "",
-      state: "",
-      country: "",
-      pincode: "",
-      employees: 0,
-      parentCompany: "",
-      childCompanies: [],
-    },
+  const form = useForm<CompanyFormData>({
+    defaultValues: (company
+      ? { ...company, type: company.type as "private" | "public" }
+      : {
+          idd: "",
+          name: "",
+          description: "",
+          phone: "",
+          email: "",
+          website: "",
+          zone: "",
+          type: "private",
+          status: "active",
+          address_1: "",
+          address_2: "",
+          city: "",
+          state: "",
+          country: "",
+          pincode: "",
+          employees: 0,
+          parentCompany: "",
+          childCompanies: [],
+        }) as CompanyFormData,
   });
 
   // Reset form when company data changes
   useEffect(() => {
-    if (company) form.reset(company);
+    if (company) {
+      form.reset({
+        ...company,
+        type: company.type as "private" | "public",
+      } as CompanyFormData);
+    }
   }, [company, form]);
 
   const onSubmit = form.handleSubmit((data) => {
@@ -67,11 +75,11 @@ export default function CompanyPage() {
     });
   });
 
-  const watchedType = form.watch("type") as keyof typeof typeColors;
-  const watchedStatus = form.watch("status") as keyof typeof statusColors;
-  const [activeTab, setActiveTab] = useState<
-    "overview" | "departments"
-  >("overview");
+  const watchedType = form.watch("type");
+  const watchedStatus = form.watch("status");
+  const [activeTab, setActiveTab] = useState<"overview" | "departments">(
+    "overview"
+  );
 
   if (isLoading) return <CompanyPageSkeleton />;
   if (error) return <NotFound />;
@@ -96,12 +104,12 @@ export default function CompanyPage() {
               {editMode ? (
                 <Select
                   value={form.watch("type")}
-                  onValueChange={(val) => form.setValue("type", val)}
+                  onValueChange={(val) =>
+                    form.setValue("type", val as "private" | "public")
+                  }
                 >
                   <SelectTrigger
-                    className={
-                      typeColors[form.watch("type") as keyof typeof typeColors]
-                    }
+                    className={typeColors[form.watch("type") || "private"]}
                   >
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
@@ -116,10 +124,10 @@ export default function CompanyPage() {
                 </Select>
               ) : (
                 <>
-                  <Badge className={typeColors[watchedType]}>
+                  <Badge className={typeColors[watchedType || "private"]}>
                     {form.getValues("type")}
                   </Badge>
-                  <Badge className={statusColors[watchedStatus]}>
+                  <Badge className={statusColors[watchedStatus || "active"]}>
                     {form.getValues("status")}
                   </Badge>
                 </>
@@ -181,7 +189,7 @@ export default function CompanyPage() {
 
         <TabsContent value="overview">
           <CompanyOverview
-            companyData={company}
+            companyData={company as unknown as CompanyFormData}
             editMode={editMode}
             form={form}
           />

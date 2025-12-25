@@ -108,7 +108,7 @@ export const useDeletePayroll = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payrollId: string) => {
+    mutationFn: async (_payrollId: string) => {
       return;
     },
     onSuccess: () => {
@@ -202,7 +202,7 @@ export const useDeletePayslip = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payslipId: string) => {
+    mutationFn: async (_payslipId: string) => {
       return;
     },
     onSuccess: () => {

@@ -30,10 +30,14 @@ export function PayrollDetail() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; name: string } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const { data: payroll, isLoading, error } = usePayroll(payrollId);
-  const { data: payslips, isLoading: payslipsLoading } = usePayrollPayslips(payrollId);
+  const { data: payslips, isLoading: payslipsLoading } =
+    usePayrollPayslips(payrollId);
   const deletePayslipMutation = useDeletePayslip();
 
   // If no ID, show error
@@ -51,7 +55,7 @@ export function PayrollDetail() {
     );
   }
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | undefined) => {
     const numAmount = Number(amount);
     if (isNaN(numAmount)) {
       return "$0.00";
@@ -80,7 +84,10 @@ export function PayrollDetail() {
     }
   };
 
-  const handleDeletePayslipClick = (payslipId: string, employeeName: string) => {
+  const handleDeletePayslipClick = (
+    payslipId: string,
+    employeeName: string
+  ) => {
     setDeleteConfirm({ id: payslipId, name: employeeName });
   };
 
@@ -159,13 +166,24 @@ export function PayrollDetail() {
           <div className="flex items-center gap-3">
             <Calendar className="w-6 h-6 text-primary" />
             <h1 className="text-2xl font-bold">
-              Payroll: {format(new Date(payroll.pay_period_start), "MMM dd")} -{" "}
-              {format(new Date(payroll.pay_period_end), "MMM dd, yyyy")}
+              Payroll:{" "}
+              {payroll.pay_period_start
+                ? format(new Date(payroll.pay_period_start), "MMM dd")
+                : "N/A"}{" "}
+              -{" "}
+              {payroll.pay_period_end
+                ? format(new Date(payroll.pay_period_end), "MMM dd, yyyy")
+                : "N/A"}
             </h1>
-            <Badge variant={getStatusColor(payroll.status)}>{payroll.status}</Badge>
+            <Badge variant={getStatusColor(payroll.status)}>
+              {payroll.status}
+            </Badge>
           </div>
           <p className="text-muted-foreground mt-1">
-            Payment Date: {format(new Date(payroll.payment_date), "MMM dd, yyyy")}
+            Payment Date:{" "}
+            {payroll.payment_date
+              ? format(new Date(payroll.payment_date), "MMM dd, yyyy")
+              : "N/A"}
           </p>
         </div>
       </div>
@@ -186,7 +204,9 @@ export function PayrollDetail() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Deductions</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Deductions
+                  </p>
                   <p className="text-2xl font-bold text-orange-600">
                     {formatCurrency(payroll.total_deductions)}
                   </p>
@@ -212,11 +232,13 @@ export function PayrollDetail() {
           <Card className="detail-card">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Employee Payslips ({payslips?.length || 0})</CardTitle>
+                <CardTitle>
+                  Employee Payslips ({payslips?.length || 0})
+                </CardTitle>
                 <CreatePayslipDialog
                   payrollId={payrollId}
                   companyId={payroll.company_id}
-                  paymentDate={payroll.payment_date}
+                  paymentDate={payroll.payment_date || new Date().toISOString()}
                 />
               </div>
             </CardHeader>
@@ -237,9 +259,13 @@ export function PayrollDetail() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <p className="font-medium">
-                            {payslip.employee?.first_name} {payslip.employee?.last_name}
+                            {payslip.employee?.first_name}{" "}
+                            {payslip.employee?.last_name}
                           </p>
-                          <Badge variant={getStatusColor(payslip.status)} className="text-xs">
+                          <Badge
+                            variant={getStatusColor(payslip.status)}
+                            className="text-xs"
+                          >
                             {payslip.status}
                           </Badge>
                         </div>
@@ -286,7 +312,9 @@ export function PayrollDetail() {
                 <div className="text-center py-8 text-muted-foreground">
                   <Users className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>No payslips created yet</p>
-                  <p className="text-sm mt-1">Add payslips for employees in this payroll period</p>
+                  <p className="text-sm mt-1">
+                    Add payslips for employees in this payroll period
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -303,19 +331,29 @@ export function PayrollDetail() {
               <div>
                 <p className="text-sm text-muted-foreground">Period</p>
                 <p className="font-medium">
-                  {format(new Date(payroll.pay_period_start), "MMM dd")} -{" "}
-                  {format(new Date(payroll.pay_period_end), "MMM dd, yyyy")}
+                  {payroll.pay_period_start
+                    ? format(new Date(payroll.pay_period_start), "MMM dd")
+                    : "N/A"}{" "}
+                  -{" "}
+                  {payroll.pay_period_end
+                    ? format(new Date(payroll.pay_period_end), "MMM dd, yyyy")
+                    : "N/A"}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Payment Date</p>
                 <p className="font-medium">
-                  {format(new Date(payroll.payment_date), "MMM dd, yyyy")}
+                  {payroll.payment_date
+                    ? format(new Date(payroll.payment_date), "MMM dd, yyyy")
+                    : "N/A"}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-                <Badge variant={getStatusColor(payroll.status)} className="mt-1">
+                <Badge
+                  variant={getStatusColor(payroll.status)}
+                  className="mt-1"
+                >
                   {payroll.status}
                 </Badge>
               </div>
@@ -335,14 +373,18 @@ export function PayrollDetail() {
                 <DollarSign className="w-4 h-4 text-green-600" />
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Gross Salary</p>
-                  <p className="font-semibold">{formatCurrency(payroll.total_gross)}</p>
+                  <p className="font-semibold">
+                    {formatCurrency(payroll.total_gross)}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-orange-600" />
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Deductions</p>
-                  <p className="font-semibold">{formatCurrency(payroll.total_deductions)}</p>
+                  <p className="font-semibold">
+                    {formatCurrency(payroll.total_deductions)}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 pt-3 border-t">

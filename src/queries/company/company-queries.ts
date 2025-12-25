@@ -35,7 +35,7 @@ export function useCompanyDetail(id: string) {
 export function useUpdateCompanyDetail(id: string) {
   const queryClient = useQueryClient();
   return useMutation<void, Error, CompanyFormData>({
-    mutationFn: async (data) => {
+    mutationFn: async (_data) => {
       // Mock update
       return;
     },
