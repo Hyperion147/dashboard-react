@@ -248,33 +248,13 @@ export function AdminOverview() {
   // Static animations (Quick Actions)
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Animate quick actions
-      gsap.fromTo(
-        ".quick-action-btn",
-        {
-          y: -20,
-          opacity: 0,
-          filter: "blur(20px)",
-        },
-        {
-          y: 0,
-          opacity: 1,
-          filter: "blur(0px)",
-          duration: 0.8,
-          stagger: 0.05,
-          ease: "power3.out",
-          delay: 0.2, // Slight delay to start after initial render
-        }
-      );
-
-      // Quick action buttons hover
       const actionButtons = document.querySelectorAll(".quick-action-btn");
       actionButtons.forEach((btn) => {
         btn.addEventListener("mouseenter", () => {
           gsap.to(btn.querySelector(".action-icon"), {
             scale: 1.2,
             duration: 0.3,
-            ease: "back.out(1.7)",
+            ease: "back.out(1)",
           });
         });
 
@@ -310,6 +290,24 @@ export function AdminOverview() {
           duration: 1,
           stagger: 0.1,
           ease: "power3.out",
+        }
+      );
+
+      gsap.fromTo(
+        ".quick-action-btn",
+        {
+          y: -20,
+          opacity: 0,
+          filter: "blur(20px)",
+        },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 0.5,
+          stagger: 0.05,
+          ease: "power3.out",
+          delay: 0.2,
         }
       );
 
@@ -395,7 +393,7 @@ export function AdminOverview() {
       {/* Quick Actions */}
       <Card
         ref={quickActionsRef}
-        className="shadow-sm border hover:shadow-md transition-shadow"
+        className="dashboard-card shadow-sm border hover:shadow-md transition-shadow"
       >
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Quick Actions</CardTitle>
