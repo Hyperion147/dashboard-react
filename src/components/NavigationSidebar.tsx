@@ -20,7 +20,7 @@ import { toast } from "@/utils/toast";
 import { LogoutConfirmDialog } from "./LogoutConfirmDialog";
 
 import type { NavigationSidebarProps } from "@/types/types";
-
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export function NavigationSidebar({
   open,
@@ -108,11 +108,11 @@ export function NavigationSidebar({
         onConfirm={handleLogoutConfirm}
         onCancel={handleLogoutCancel}
       />
-      
+
       <div className="flex h-screen">
         <div
           className={cn(
-            "flex flex-1 md:flex-row top-0 left-0 h-full w-60 text-primary",
+            "flex flex-1 md:flex-row top-0 left-0 h-full w-60 text-primary"
           )}
         >
           <Sidebar open={open} setOpen={setOpen}>
@@ -153,17 +153,15 @@ export function NavigationSidebar({
 export const Logo = () => {
   return (
     <p className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal">
-      <img
-        src="/logo.jpeg"
-        alt=""
-        className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg"
-      />
+      <Avatar className="h-6 w-6 border-1 border-primary">
+        <AvatarFallback>DE</AvatarFallback>
+      </Avatar>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="font-medium whitespace-pre"
       >
-        Advika Innovate
+        Dashboard React
       </motion.span>
     </p>
   );
@@ -171,11 +169,9 @@ export const Logo = () => {
 export const LogoIcon = () => {
   return (
     <p className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal">
-      <img
-        src="/logo.jpeg"
-        alt=""
-        className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg"
-      />
+      <Avatar className="h-6 w-6 border-1 border-primary">
+        <AvatarFallback>DE</AvatarFallback>
+      </Avatar>
     </p>
   );
 };
