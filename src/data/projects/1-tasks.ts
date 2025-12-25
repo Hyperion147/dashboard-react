@@ -1,0 +1,55 @@
+import type { Task } from "./tasks"
+
+export const tasks: Task[] = [
+  {
+    id: "1",
+    title: "Design wireframes for main screens",
+    assignee: "Sarah Johnson",
+    status: "done",
+    priority: "high",
+    dueDate: "2025-10-15",
+    subtasks: 5,
+    completedSubtasks: 5,
+  },
+  {
+    id: "2",
+    title: "Create design system components",
+    assignee: "Sarah Johnson",
+    status: "in-progress",
+    priority: "high",
+    dueDate: "2025-10-30",
+    subtasks: 8,
+    completedSubtasks: 5,
+  },
+  {
+    id: "3",
+    title: "Implement authentication flow",
+    assignee: "Mike Chen",
+    status: "in-progress",
+    priority: "urgent",
+    dueDate: "2025-10-25",
+    subtasks: 6,
+    completedSubtasks: 3,
+  },
+  {
+    id: "4",
+    title: "Setup API endpoints",
+    assignee: "Emma Davis",
+    status: "todo",
+    priority: "high",
+    dueDate: "2025-11-05",
+    subtasks: 10,
+    completedSubtasks: 0,
+  },
+  {
+    id: "5",
+    title: "Database schema design",
+    assignee: "Emma Davis",
+    status: "done",
+    priority: "medium",
+    dueDate: "2025-10-20",
+    subtasks: 4,
+    completedSubtasks: 4,
+  },
+]
+

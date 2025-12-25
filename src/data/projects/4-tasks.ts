@@ -1,0 +1,55 @@
+import type { Task } from "./tasks"
+
+export const tasks: Task[] = [
+  {
+    id: "1",
+    title: "Vulnerability scanning",
+    assignee: "Alex Rodriguez",
+    status: "done",
+    priority: "urgent",
+    dueDate: "2025-10-05",
+    subtasks: 6,
+    completedSubtasks: 6,
+  },
+  {
+    id: "2",
+    title: "Penetration testing",
+    assignee: "Alex Rodriguez",
+    status: "done",
+    priority: "urgent",
+    dueDate: "2025-10-08",
+    subtasks: 8,
+    completedSubtasks: 8,
+  },
+  {
+    id: "3",
+    title: "Code security review",
+    assignee: "Emma Davis",
+    status: "done",
+    priority: "high",
+    dueDate: "2025-10-10",
+    subtasks: 12,
+    completedSubtasks: 12,
+  },
+  {
+    id: "4",
+    title: "Security documentation",
+    assignee: "Lisa Park",
+    status: "done",
+    priority: "medium",
+    dueDate: "2025-10-12",
+    subtasks: 4,
+    completedSubtasks: 4,
+  },
+  {
+    id: "5",
+    title: "Final security report",
+    assignee: "Alex Rodriguez",
+    status: "done",
+    priority: "high",
+    dueDate: "2025-10-15",
+    subtasks: 5,
+    completedSubtasks: 5,
+  },
+]
+

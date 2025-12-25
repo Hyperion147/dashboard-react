@@ -1,0 +1,55 @@
+import type { Task } from "./tasks"
+
+export const tasks: Task[] = [
+  {
+    id: "1",
+    title: "Database schema analysis",
+    assignee: "Emma Davis",
+    status: "done",
+    priority: "high",
+    dueDate: "2025-11-05",
+    subtasks: 6,
+    completedSubtasks: 6,
+  },
+  {
+    id: "2",
+    title: "Create migration scripts",
+    assignee: "Emma Davis",
+    status: "in-progress",
+    priority: "urgent",
+    dueDate: "2025-11-10",
+    subtasks: 12,
+    completedSubtasks: 6,
+  },
+  {
+    id: "3",
+    title: "Test data migration",
+    assignee: "Alex Rodriguez",
+    status: "todo",
+    priority: "high",
+    dueDate: "2025-11-20",
+    subtasks: 8,
+    completedSubtasks: 0,
+  },
+  {
+    id: "4",
+    title: "Update application queries",
+    assignee: "Mike Chen",
+    status: "todo",
+    priority: "medium",
+    dueDate: "2025-11-25",
+    subtasks: 15,
+    completedSubtasks: 0,
+  },
+  {
+    id: "5",
+    title: "Performance testing",
+    assignee: "Alex Rodriguez",
+    status: "todo",
+    priority: "medium",
+    dueDate: "2025-12-01",
+    subtasks: 10,
+    completedSubtasks: 0,
+  },
+]
+
