@@ -23,7 +23,6 @@ export function PayslipManagement() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
 
   const { data: employees, isLoading } = useCompanyEmployees(companyId || "");
 
@@ -57,47 +56,35 @@ export function PayslipManagement() {
     };
   }, [employees]);
 
-  // Animations - only run on initial mount
   useEffect(() => {
-    if (!employees) return;
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".initial-animation",
+                {
+                    y: -20,
+                    opacity: 0,
+                    filter: "blur(20px)",
+                },
+                {
+                    y: 0,
+                    opacity: 1,
+                    filter: "blur(0px)",
+                    duration: 0.8,
+                    stagger: 0.05,
+                    ease: "power3.out",
+                    delay: 0.2,
+                }
+            );
+        }, containerRef);
 
-    const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, {
-        opacity: 0,
-        y: -20,
-        duration: 0.6,
-        ease: "power2.out",
-      });
-
-      gsap.from(".stat-card", {
-        opacity: 0,
-        y: -30,
-        duration: 0.6,
-        stagger: 0.1,
-        delay: 0.2,
-        ease: "power2.out",
-      });
-
-      gsap.from(".employee-card", {
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        stagger: 0.05,
-        delay: 0.4,
-        ease: "power2.out",
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employees]);
+        return () => ctx.revert();
+    }, []);
 
   return (
     <div ref={containerRef} className="space-y-6 p-4">
       {/* Header */}
       <div
-        ref={headerRef}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="initial-animation flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
           <h2 className="text-2xl font-bold">Payslip Management</h2>
@@ -109,8 +96,8 @@ export function PayslipManagement() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="stat-card">
-          <CardHeader className="pb-2">
+        <Card className="initial-animation">
+          <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Employees
             </CardTitle>
@@ -123,8 +110,8 @@ export function PayslipManagement() {
           </CardContent>
         </Card>
 
-        <Card className="stat-card">
-          <CardHeader className="pb-2">
+        <Card className="initial-animation">
+          <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Filtered Results
             </CardTitle>
@@ -139,10 +126,10 @@ export function PayslipManagement() {
       {/* Filters and List */}
       <Card>
         <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 initial-animation">
             <CardTitle>All Employees</CardTitle>
             <div className="relative flex-1 sm:flex-none">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground initial-animation" />
               <Input
                 placeholder="Search employees..."
                 className="pl-8 w-full sm:w-64"
@@ -175,7 +162,7 @@ export function PayslipManagement() {
               {filteredEmployees.map((employee) => (
                 <div
                   key={employee.id}
-                  className="employee-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                  className="employee-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors initial-animation"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -198,7 +185,7 @@ export function PayslipManagement() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 initial-animation">
                     <Link to={`/payslips/employee/${employee.id}`}>
                       <Button variant="outline" size="sm">
                         <FileText className="w-4 h-4 mr-2" />

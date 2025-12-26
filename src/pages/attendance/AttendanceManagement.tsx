@@ -54,7 +54,6 @@ export function AttendanceManagement() {
   }), [startDate, endDate]);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
 
   const { data: employees } = useCompanyEmployees(companyId || "");
   const { data: attendance, isLoading } = useCompanyAttendance(companyId || "", dateRange);
@@ -173,45 +172,35 @@ export function AttendanceManagement() {
     }
   };
 
-  // Animations
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, {
-        opacity: 0,
-        y: -20,
-        duration: 0.6,
-        ease: "power2.out",
-      });
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                ".initial-animation",
+                {
+                    y: -20,
+                    opacity: 0,
+                    filter: "blur(20px)",
+                },
+                {
+                    y: 0,
+                    opacity: 1,
+                    filter: "blur(0px)",
+                    duration: 0.8,
+                    stagger: 0.05,
+                    ease: "power3.out",
+                    delay: 0.2,
+                }
+            );
+        }, containerRef);
 
-      gsap.from(".stat-card", {
-        opacity: 0,
-        y: -30,
-        duration: 0.6,
-        stagger: 0.1,
-        delay: 0.2,
-        ease: "power2.out",
-      });
-
-      gsap.from(".attendance-card", {
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        stagger: 0.05,
-        delay: 0.4,
-        ease: "power2.out",
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+        return () => ctx.revert();
+    }, []);
 
   return (
     <div ref={containerRef} className="space-y-6 p-4">
       {/* Header */}
       <div
-        ref={headerRef}
-        className="flex flex-col sm:flex-row gap-4 justify-between"
+        className="initial-animation flex flex-col sm:flex-row gap-4 justify-between"
       >
         <div>
           <h1 className="text-2xl font-bold">Attendance Management</h1>
@@ -224,8 +213,8 @@ export function AttendanceManagement() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="stat-card">
-          <CardContent className="p-4">
+        <Card className="initial-animation">
+          <CardContent>
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-medium">Total Records</span>
@@ -233,8 +222,8 @@ export function AttendanceManagement() {
             <p className="text-2xl font-bold mt-2">{stats.total}</p>
           </CardContent>
         </Card>
-        <Card className="stat-card">
-          <CardContent className="p-4">
+        <Card className="initial-animation">
+          <CardContent>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-green-600" />
               <span className="text-sm font-medium">Present</span>
@@ -242,8 +231,8 @@ export function AttendanceManagement() {
             <p className="text-2xl font-bold mt-2">{stats.present}</p>
           </CardContent>
         </Card>
-        <Card className="stat-card">
-          <CardContent className="p-4">
+        <Card className="initial-animation">
+          <CardContent>
             <div className="flex items-center gap-2">
               <XCircle className="w-4 h-4 text-red-600" />
               <span className="text-sm font-medium">Absent</span>
@@ -251,8 +240,8 @@ export function AttendanceManagement() {
             <p className="text-2xl font-bold mt-2">{stats.absent}</p>
           </CardContent>
         </Card>
-        <Card className="stat-card">
-          <CardContent className="p-4">
+        <Card className="initial-animation">
+          <CardContent>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-medium">On Leave</span>
@@ -260,8 +249,8 @@ export function AttendanceManagement() {
             <p className="text-2xl font-bold mt-2">{stats.leave}</p>
           </CardContent>
         </Card>
-        <Card className="stat-card">
-          <CardContent className="p-4">
+        <Card className="initial-animation">
+          <CardContent>
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-purple-600" />
               <span className="text-sm font-medium">Avg Hours</span>
@@ -273,7 +262,7 @@ export function AttendanceManagement() {
 
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="relative">
+        <div className="relative initial-animation">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search employees..."
@@ -285,7 +274,7 @@ export function AttendanceManagement() {
         </div>
 
         <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full initial-animation">
             <SelectValue placeholder="All Employees" />
           </SelectTrigger>
           <SelectContent>
@@ -299,7 +288,7 @@ export function AttendanceManagement() {
         </Select>
 
         <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full initial-animation">
             <SelectValue placeholder="All Status" />
           </SelectTrigger>
           <SelectContent>
@@ -317,6 +306,7 @@ export function AttendanceManagement() {
           onDateChange={(date) => date && setStartDate(date)}
           placeholder="Start date"
           disabled={isLoading}
+          className="initial-animation"
         />
 
         <DatePicker
@@ -324,19 +314,20 @@ export function AttendanceManagement() {
           onDateChange={(date) => date && setEndDate(date)}
           placeholder="End date"
           disabled={isLoading}
+          className="initial-animation"
         />
       </div>
 
       {/* Attendance List */}
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-4 initial-animation">
           {Array.from({ length: 10 }).map((_, i) => (
             <Skeleton key={i} className="h-20 w-full" />
           ))}
         </div>
       ) : filteredAttendance.length === 0 ? (
         <Card>
-          <CardContent className="p-12 text-center">
+          <CardContent className="p-12 text-center initial-animation">
             <Calendar className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-lg font-medium mb-2">No attendance records found</h3>
             <p className="text-muted-foreground">
@@ -349,7 +340,7 @@ export function AttendanceManagement() {
       ) : (
         <div className="space-y-3">
           {filteredAttendance.map((record) => (
-            <Card key={record.id} className="attendance-card hover:shadow-md transition-shadow">
+            <Card key={record.id} className="attendance-card hover:shadow-md transition-shadow initial-animation">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4 flex-1">
