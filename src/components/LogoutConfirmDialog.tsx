@@ -69,7 +69,7 @@ export function LogoutConfirmDialog({
           <Progress value={progressValue} className="h-2" />
         </div>
 
-        <DialogFooter className="flex gap-2 sm:gap-0">
+        <DialogFooter className="flex gap-4">
           <Button
             type="button"
             variant="outline"

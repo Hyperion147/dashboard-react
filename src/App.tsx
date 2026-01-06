@@ -29,6 +29,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { useAuth } from "./contexts/AuthContext";
 import { Toaster } from "@/utils/toast";
+import Profile from "./components/custom/profile";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -213,6 +214,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CompanyDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />

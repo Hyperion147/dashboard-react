@@ -14,7 +14,7 @@ import {
     BarChart3,
     PieChart,
     Activity,
-    ArrowRight,
+    ArrowRight
 } from "lucide-react";
 import { useRef, useLayoutEffect, useEffect } from "react";
 import { gsap } from "gsap";
@@ -124,7 +124,7 @@ export function AdminOverview() {
 
     const ActivityCardSkeleton = () => (
         <Card className="dashboard-card shadow-md border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between">
                 <Skeleton className="h-5 w-32" />
                 <Skeleton className="h-8 w-20" />
             </CardHeader>
@@ -155,7 +155,7 @@ export function AdminOverview() {
 
     const ListCardSkeleton = () => (
         <Card className="dashboard-card shadow-md border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between">
                 <Skeleton className="h-5 w-32" />
                 <Skeleton className="h-8 w-20" />
             </CardHeader>
@@ -180,7 +180,7 @@ export function AdminOverview() {
 
     const DepartmentCardSkeleton = () => (
         <Card className="dashboard-card shadow-md border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between">
                 <Skeleton className="h-5 w-32" />
                 <Skeleton className="h-8 w-8" />
             </CardHeader>
@@ -202,7 +202,7 @@ export function AdminOverview() {
 
     const MetricsCardSkeleton = () => (
         <Card className="dashboard-card shadow-md border">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between">
                 <Skeleton className="h-5 w-32" />
                 <Skeleton className="h-8 w-8" />
             </CardHeader>
@@ -275,7 +275,7 @@ export function AdminOverview() {
     }, []);
 
     return (
-        <div ref={containerRef} className="space-y-6 p-4">
+        <div ref={containerRef} className="space-y-4 p-4">
             {/* Header */}
             <div className="initial-animation flex items-center justify-between">
                 <div>
@@ -299,7 +299,7 @@ export function AdminOverview() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
                         {[
                             {
                                 icon: UserPlus,
@@ -375,7 +375,7 @@ export function AdminOverview() {
             </Card>
 
             {/* Stats Cards */}
-            <div className="initial-animation grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="initial-animation grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 {isLoading ? (
                     <>
                         <StatCardSkeleton />
@@ -454,7 +454,7 @@ export function AdminOverview() {
             </div>
 
             {/* Main Dashboard Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 initial-animation">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 initial-animation">
                 {/* Recent Activity */}
                 {isActivityLoading ? (
                     <ActivityCardSkeleton />
@@ -465,7 +465,7 @@ export function AdminOverview() {
                                 Recent Activity
                             </CardTitle>
                             <Link to="/employees">
-                                <Button variant="ghost" size="sm">
+                                <Button variant="outline" size="sm">
                                     View All
                                     <ArrowRight className="w-3 h-3" />
                                 </Button>
@@ -539,7 +539,7 @@ export function AdminOverview() {
                                 Upcoming Deadlines
                             </CardTitle>
                             <Link to="/projects">
-                                <Button variant="ghost" size="sm">
+                                <Button variant="outline" size="sm">
                                     View All
                                     <ArrowRight className="w-3 h-3" />
                                 </Button>
@@ -611,7 +611,7 @@ export function AdminOverview() {
                             <CardTitle className="font-semibold text-base">
                                 Pending Leaves
                             </CardTitle>
-                            <Button variant="ghost" size="sm" className="h-8">
+                            <Button variant="outline" size="sm" className="h-8">
                                 <BarChart3 className="w-4 h-4" />
                             </Button>
                         </CardHeader>
@@ -664,17 +664,17 @@ export function AdminOverview() {
             </div>
 
             {/* Department Stats & Task Metrics */}
-            <div className="initial-animation grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="initial-animation grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {/* Department Attendance */}
                 {isEmployeeLoading ? (
                     <DepartmentCardSkeleton />
                 ) : (
                     <Card className="dashboard-card shadow-md border">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="font-semibold text-base">
                                 Department Overview
                             </CardTitle>
-                            <Button variant="ghost" size="sm" className="h-8">
+                            <Button variant="outline" size="sm" className="h-8">
                                 <PieChart className="w-4 h-4" />
                             </Button>
                         </CardHeader>
@@ -721,16 +721,16 @@ export function AdminOverview() {
                     <MetricsCardSkeleton />
                 ) : (
                     <Card className="dashboard-card shadow-md border">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="font-semibold text-base">
                                 Task Metrics
                             </CardTitle>
-                            <Button variant="ghost" size="sm" className="h-8">
+                            <Button variant="outline" size="sm" className="h-8">
                                 <Activity className="w-4 h-4" />
                             </Button>
                         </CardHeader>
                         <CardContent>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-2">
                                 <div className="animate-item p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
                                     <p className="text-xs text-muted-foreground mb-1">
                                         Total Tasks
@@ -794,16 +794,16 @@ export function AdminOverview() {
             </div>
 
             <Card className="initial-animation shadow-md border">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="font-semibold text-base">
                         Attendance Overview
                     </CardTitle>
-                    <Button variant="ghost" size="sm" className="h-8">
-                        <Activity className="w-4 h-4" />
+                    <Button variant="outline" size="sm" className="h-8">
+                        <Calendar className="w-4 h-4" />
                     </Button>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         <div className="animate-item p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors text-center">
                             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
                                 <Users className="w-5 h-5 text-green-600" />

@@ -89,8 +89,7 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-full px-4 py-4 hidden md:flex md:flex-col bg-secondary/30 backdrop-blur-xl w-[300px] shrink-0 hover:shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_2px_2px_10px_4px_rgba(119,196,165,0.3)]",
-          "shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_2px_2px_10px_4px_rgba(119,196,165,0.3)] hover:shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_5px_5px_10px_4px_rgba(119,196,165,0.5)]",
+          "h-full px-4 py-4 hidden md:flex md:flex-col bg-secondary/50 backdrop-blur-xl w-75 shrink-0 border",
           className
         )}
         animate={{
@@ -137,7 +136,7 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-100 flex flex-col justify-between",
                 className
               )}
             >
@@ -169,7 +168,7 @@ export const SidebarLink = ({
     <NavLink
       to={link.href}
       className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
+        "flex items-center justify-start gap-2 group/sidebar py-2",
         className
       )}
       {...props}
@@ -181,7 +180,7 @@ export const SidebarLink = ({
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
-        className="text-primary text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        className="text-primary text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block p-0! m-0!"
       >
         {link.label}
       </motion.span>
