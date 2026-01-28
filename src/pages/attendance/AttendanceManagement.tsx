@@ -24,7 +24,10 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCompanyAttendance, useDeleteAttendance } from "@/queries/attendance/attendanceQueries";
+import {
+  useCompanyAttendance,
+  useDeleteAttendance,
+} from "@/queries/attendance/attendanceQueries";
 import { useCompanyEmployees } from "@/queries/employee/employee";
 import { CreateAttendanceDialog } from "@/components/attendance/CreateAttendanceDialog";
 import { EditAttendanceDialog } from "@/components/attendance/EditAttendanceDialog";
@@ -42,21 +45,30 @@ export function AttendanceManagement() {
   const [selectedEmployee, setSelectedEmployee] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [startDate, setStartDate] = useState<Date>(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   );
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; name: string } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   // Convert dates to API format
-  const dateRange = useMemo(() => ({
-    start_date: startDate.toISOString().split("T")[0],
-    end_date: endDate.toISOString().split("T")[0],
-  }), [startDate, endDate]);
+  const dateRange = useMemo(
+    () => ({
+      start_date: startDate.toISOString().split("T")[0],
+      end_date: endDate.toISOString().split("T")[0],
+    }),
+    [startDate, endDate],
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: employees } = useCompanyEmployees(companyId || "");
-  const { data: attendance, isLoading } = useCompanyAttendance(companyId || "", dateRange);
+  const { data: attendance, isLoading } = useCompanyAttendance(
+    companyId || "",
+    dateRange,
+  );
   const deleteAttendanceMutation = useDeleteAttendance();
 
   // Filter attendance
@@ -65,14 +77,21 @@ export function AttendanceManagement() {
 
     return attendance.filter((record) => {
       const matchesSearch =
-        record.employee?.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.employee?.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.employee?.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.employee?.first_name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        record.employee?.last_name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        record.employee?.email
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         record.employee?.idd.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesEmployee =
         selectedEmployee === "all" || record.employee_id === selectedEmployee;
-      const matchesStatus = selectedStatus === "all" || record.status === selectedStatus;
+      const matchesStatus =
+        selectedStatus === "all" || record.status === selectedStatus;
 
       return matchesSearch && matchesEmployee && matchesStatus;
     });
@@ -94,13 +113,13 @@ export function AttendanceManagement() {
     const present = attendance.filter((a) => a.status === "present").length;
     const absent = attendance.filter((a) => a.status === "absent").length;
     const leave = attendance.filter((a) => a.status === "leave").length;
-    
+
     // Ensure we're working with numbers and handle NaN cases
     const totalWorkHours = attendance.reduce((sum, a) => {
       const hours = Number(a.total_work_hours);
       return sum + (isNaN(hours) ? 0 : hours);
     }, 0);
-    
+
     const avgWorkHours = total > 0 ? totalWorkHours / total : 0;
     const roundedAvg = Math.round(avgWorkHours * 10) / 10;
 
@@ -114,7 +133,7 @@ export function AttendanceManagement() {
   }, [attendance]);
 
   const getStatusColor = (
-    status: Attendance["status"]
+    status: Attendance["status"],
   ): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
       case "present":
@@ -173,37 +192,37 @@ export function AttendanceManagement() {
   };
 
   useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo(
-                ".initial-animation",
-                {
-                    y: -20,
-                    opacity: 0,
-                    filter: "blur(20px)",
-                },
-                {
-                    y: 0,
-                    opacity: 1,
-                    filter: "blur(0px)",
-                    duration: 0.8,
-                    stagger: 0.05,
-                    ease: "power3.out",
-                    delay: 0.2,
-                }
-            );
-        }, containerRef);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".initial-animation",
+        {
+          y: -20,
+          opacity: 0,
+          filter: "blur(20px)",
+        },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 0.8,
+          stagger: 0.05,
+          ease: "power3.out",
+          delay: 0.2,
+        },
+      );
+    }, containerRef);
 
-        return () => ctx.revert();
-    }, []);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div ref={containerRef} className="space-y-6 p-4">
       {/* Header */}
-      <div
-        className="initial-animation flex flex-col sm:flex-row gap-4 justify-between"
-      >
+      <div className="initial-animation flex flex-col sm:flex-row gap-4 justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Attendance Management</h1>
+          <h1 className="text-2xl font-bold font-serif">
+            Attendance Management
+          </h1>
           <p className="text-muted-foreground">
             Track and manage employee attendance
           </p>
@@ -219,7 +238,7 @@ export function AttendanceManagement() {
               <Users className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-medium">Total Records</span>
             </div>
-            <p className="text-2xl font-bold mt-2">{stats.total}</p>
+            <p className="text-2xl font-bold mt-2 font-mono">{stats.total}</p>
           </CardContent>
         </Card>
         <Card className="initial-animation">
@@ -228,7 +247,7 @@ export function AttendanceManagement() {
               <CheckCircle2 className="w-4 h-4 text-green-600" />
               <span className="text-sm font-medium">Present</span>
             </div>
-            <p className="text-2xl font-bold mt-2">{stats.present}</p>
+            <p className="text-2xl font-bold mt-2 font-mono">{stats.present}</p>
           </CardContent>
         </Card>
         <Card className="initial-animation">
@@ -237,7 +256,7 @@ export function AttendanceManagement() {
               <XCircle className="w-4 h-4 text-red-600" />
               <span className="text-sm font-medium">Absent</span>
             </div>
-            <p className="text-2xl font-bold mt-2">{stats.absent}</p>
+            <p className="text-2xl font-bold mt-2 font-mono">{stats.absent}</p>
           </CardContent>
         </Card>
         <Card className="initial-animation">
@@ -246,7 +265,7 @@ export function AttendanceManagement() {
               <Calendar className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-medium">On Leave</span>
             </div>
-            <p className="text-2xl font-bold mt-2">{stats.leave}</p>
+            <p className="text-2xl font-bold mt-2 font-mono">{stats.leave}</p>
           </CardContent>
         </Card>
         <Card className="initial-animation">
@@ -255,7 +274,9 @@ export function AttendanceManagement() {
               <TrendingUp className="w-4 h-4 text-purple-600" />
               <span className="text-sm font-medium">Avg Hours</span>
             </div>
-            <p className="text-2xl font-bold mt-2">{stats.avgWorkHours}h</p>
+            <p className="text-2xl font-bold mt-2 font-mono">
+              {stats.avgWorkHours}h
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -329,9 +350,13 @@ export function AttendanceManagement() {
         <Card>
           <CardContent className="p-12 text-center initial-animation">
             <Calendar className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium mb-2">No attendance records found</h3>
+            <h3 className="text-lg font-medium mb-2">
+              No attendance records found
+            </h3>
             <p className="text-muted-foreground">
-              {searchTerm || selectedEmployee !== "all" || selectedStatus !== "all"
+              {searchTerm ||
+              selectedEmployee !== "all" ||
+              selectedStatus !== "all"
                 ? "Try adjusting your filters"
                 : "No attendance records for the selected date range"}
             </p>
@@ -340,7 +365,10 @@ export function AttendanceManagement() {
       ) : (
         <div className="space-y-3">
           {filteredAttendance.map((record) => (
-            <Card key={record.id} className="attendance-card hover:shadow-md transition-shadow initial-animation">
+            <Card
+              key={record.id}
+              className="attendance-card hover:shadow-md transition-shadow initial-animation"
+            >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4 flex-1">
@@ -350,13 +378,17 @@ export function AttendanceManagement() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-medium">
-                          {record.employee?.first_name} {record.employee?.last_name}
+                          {record.employee?.first_name}{" "}
+                          {record.employee?.last_name}
                         </h4>
-                        <Badge variant={getStatusColor(record.status)} className="text-xs">
+                        <Badge
+                          variant={getStatusColor(record.status)}
+                          className="text-xs"
+                        >
                           {record.status.replace("_", " ").toUpperCase()}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground font-mono">
                         {record.employee?.idd} • {record.employee?.email}
                       </p>
                     </div>
@@ -365,11 +397,17 @@ export function AttendanceManagement() {
                     <div className="flex items-center gap-6 text-sm">
                       <div className="text-center">
                         <p className="text-xs text-muted-foreground">Date</p>
-                        <p className="font-medium">{formatDate(record.date)}</p>
+                        <p className="font-medium font-mono">
+                          {formatDate(record.date)}
+                        </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-xs text-muted-foreground">Work Hours</p>
-                        <p className="font-medium">{record.total_work_hours || 0}h</p>
+                        <p className="text-xs text-muted-foreground">
+                          Work Hours
+                        </p>
+                        <p className="font-medium font-mono">
+                          {record.total_work_hours || 0}h
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -380,7 +418,7 @@ export function AttendanceManagement() {
                         onClick={() =>
                           handleDeleteClick(
                             record.id,
-                            `${record.employee?.first_name} ${record.employee?.last_name}`
+                            `${record.employee?.first_name} ${record.employee?.last_name}`,
                           )
                         }
                         disabled={deleteAttendanceMutation.isPending}
