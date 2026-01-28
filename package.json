@@ -27,7 +27,7 @@
     "axios": "^1.13.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "convergence-ui": "file:.yalc/convergence-ui",
+    "convergence-ui": "^1.4.0",
     "date-fns": "^4.1.0",
     "gsap": "^3.14.2",
     "lucide-react": "^0.544.0",
