@@ -140,7 +140,7 @@ export default function AddEmployeePage() {
   if (!companyId) {
     return (
       <div className="m-4 max-w-5xl mx-auto pb-4">
-        <div className="flex items-center justify-center min-h-[400px]">
+        <div className="flex items-center justify-center min-h-100">
           <div className="text-center space-y-4">
             <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
             <p className="text-muted-foreground">
@@ -182,7 +182,7 @@ export default function AddEmployeePage() {
         </div>
 
         {/* Progress Indicator */}
-        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+        <Card className="bg-linear-to-r from-primary/5 to-primary/10 border-primary/20">
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -894,7 +894,7 @@ export default function AddEmployeePage() {
                             <textarea
                               {...field}
                               id="profile_summary"
-                              className="flex min-h-[100px] w-full rounded-none border resize-none border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              className="flex min-h-25px w-full rounded-none border resize-none border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                               placeholder="Brief professional summary highlighting key skills, experience, and achievements..."
                             />
                             <p className="text-xs text-muted-foreground">
@@ -911,7 +911,7 @@ export default function AddEmployeePage() {
           </Tabs>
 
           {/* Form Actions */}
-          <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
+          <Card className="border-2 border-primary/20 bg-linear-to-r from-primary/5 to-transparent">
             <CardContent>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-start gap-3">
@@ -944,7 +944,7 @@ export default function AddEmployeePage() {
                       !isBasicComplete ||
                       !isProfessionalComplete
                     }
-                    className="min-w-[160px] flex-1 sm:flex-none"
+                    className="min-w-40 flex-1 sm:flex-none"
                   >
                     {isSubmitting ? (
                       <>
