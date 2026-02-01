@@ -230,7 +230,7 @@ export function EmployeeAttendance() {
                 {attendance.map((record) => (
                   <div
                     key={record.id}
-                    className="flex items-center justify-between p-3 border rounded-lg"
+                    className="flex items-center justify-between p-3 border rounded-none"
                   >
                     <div className="flex items-center gap-3">
                       <Badge variant={getStatusColor(record.status)}>
@@ -266,7 +266,7 @@ export function EmployeeAttendance() {
                 {punchLogs.slice(0, 10).map((log) => (
                   <div
                     key={log.id}
-                    className="flex items-center justify-between p-3 border rounded-lg"
+                    className="flex items-center justify-between p-3 border rounded-none"
                   >
                     <div>
                       <p className="font-medium capitalize">

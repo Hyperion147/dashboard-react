@@ -204,7 +204,7 @@ export function AdminOverview() {
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="p-3 rounded-lg border bg-card">
+            <div key={i} className="p-3 rounded-none border bg-card">
               <Skeleton className="h-3 w-16 mb-2" />
               <Skeleton className="h-6 w-12 mb-2" />
               <div className="flex items-center gap-1">
@@ -347,7 +347,7 @@ export function AdminOverview() {
               <Link
                 key={idx}
                 to={link}
-                className="quick-action-btn hover:shadow-lg transition-all duration-300 rounded-xl"
+                className="quick-action-btn hover:shadow-lg transition-all duration-300"
               >
                 <Button
                   variant="outline"
@@ -468,7 +468,7 @@ export function AdminOverview() {
                   recentActivity.slice(0, 5).map((activity, index) => (
                     <div
                       key={activity.id || index}
-                      className="animate-item flex items-center justify-between pb-1 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                      className="animate-item flex items-center justify-between pb-1 rounded-none hover:bg-muted/50 transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
@@ -537,7 +537,7 @@ export function AdminOverview() {
                   upcomingDeadlines.slice(0, 4).map((deadline) => (
                     <div
                       key={deadline.id}
-                      className="animate-item space-y-2 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
+                      className="animate-item space-y-2 rounded-none hover:bg-muted/30 transition-colors cursor-pointer"
                     >
                       <div className="flex items-center justify-between">
                         <div>
@@ -599,7 +599,7 @@ export function AdminOverview() {
                   pendingLeaves.slice(0, 4).map((leave) => (
                     <div
                       key={leave.id}
-                      className="animate-item space-y-2 rounded-lg hover:bg-muted/30 transition-colors"
+                      className="animate-item space-y-2 rounded-none hover:bg-muted/30 transition-colors"
                     >
                       <div className="flex items-center justify-between">
                         <div>
@@ -694,7 +694,7 @@ export function AdminOverview() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-2">
-                <div className="animate-item p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+                <div className="animate-item p-3 rounded-none border bg-card hover:bg-muted/30 transition-colors">
                   <p className="text-xs text-muted-foreground mb-1">
                     Total Tasks
                   </p>
@@ -706,7 +706,7 @@ export function AdminOverview() {
                     <span className="text-xs text-blue-600">All tasks</span>
                   </div>
                 </div>
-                <div className="animate-item p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+                <div className="animate-item p-3 rounded-none border bg-card hover:bg-muted/30 transition-colors">
                   <p className="text-xs text-muted-foreground mb-1">
                     Completed
                   </p>
@@ -718,7 +718,7 @@ export function AdminOverview() {
                     <span className="text-xs text-green-600">Finished</span>
                   </div>
                 </div>
-                <div className="animate-item p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+                <div className="animate-item p-3 rounded-none border bg-card hover:bg-muted/30 transition-colors">
                   <p className="text-xs text-muted-foreground mb-1">
                     In Progress
                   </p>
@@ -730,7 +730,7 @@ export function AdminOverview() {
                     <span className="text-xs text-orange-600">Active</span>
                   </div>
                 </div>
-                <div className="animate-item p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+                <div className="animate-item p-3 rounded-none border bg-card hover:bg-muted/30 transition-colors">
                   <p className="text-xs text-muted-foreground mb-1">Overdue</p>
                   <p className="text-xl font-bold font-mono">
                     {projectTaskStats?.overdueTasks || 0}
@@ -757,7 +757,7 @@ export function AdminOverview() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <div className="animate-item p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors text-center">
+            <div className="animate-item p-4 rounded-none border bg-card hover:bg-muted/30 transition-colors text-center">
               <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
                 <Users className="w-5 h-5 text-green-600" />
               </div>
@@ -769,7 +769,7 @@ export function AdminOverview() {
                 {attendanceStats?.attendanceRate || 0}%
               </Badge>
             </div>
-            <div className="animate-item p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors text-center">
+            <div className="animate-item p-4 rounded-none border bg-card hover:bg-muted/30 transition-colors text-center">
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-2">
                 <Clock className="w-5 h-5 text-red-600" />
               </div>
@@ -781,7 +781,7 @@ export function AdminOverview() {
                 Absent
               </Badge>
             </div>
-            <div className="animate-item p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors text-center">
+            <div className="animate-item p-4 rounded-none border bg-card hover:bg-muted/30 transition-colors text-center">
               <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
                 <Clock className="w-5 h-5 text-yellow-600" />
               </div>
@@ -793,7 +793,7 @@ export function AdminOverview() {
                 Late
               </Badge>
             </div>
-            <div className="animate-item p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors text-center">
+            <div className="animate-item p-4 rounded-none border bg-card hover:bg-muted/30 transition-colors text-center">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
                 <Activity className="w-5 h-5 text-blue-600" />
               </div>

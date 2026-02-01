@@ -171,7 +171,7 @@ export function ProjectBoardView({ projectId }: { projectId: string }) {
           {boardState.map((column) => (
             <div
               key={column.id}
-              className="kanban-column flex flex-col bg-muted/30 rounded-lg p-3 min-w-[320px] flex-shrink-0"
+              className="kanban-column flex flex-col bg-muted/30 rounded-none p-3 min-w-[320px] flex-shrink-0"
             >
               <div className="flex items-center justify-between mb-3 px-2">
                 <div className="flex items-center gap-2">
@@ -203,7 +203,7 @@ export function ProjectBoardView({ projectId }: { projectId: string }) {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className={`space-y-3 flex-1 min-h-[200px] p-2 rounded-md transition-colors overflow-hidden ${
+                    className={`space-y-3 flex-1 min-h-[200px] p-2 rounded-none transition-colors overflow-hidden ${
                       snapshot.isDraggingOver 
                         ? "bg-muted/50 border border-dashed border-primary" 
                         : "bg-muted/20"

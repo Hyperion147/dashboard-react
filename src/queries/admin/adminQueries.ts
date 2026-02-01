@@ -156,23 +156,23 @@ export const getRecentActivity = async (_companyId: string, _page = 1, _limit = 
 // Get pending leaves
 export const getPendingLeaves = async (_companyId: string): Promise<PendingLeave[]> => {
   return [
-    { id: "1", employeeName: "Charlie Brown", leaveType: "Sick Leave", startDate: "2024-01-10", endDate: "2024-01-12", days: 3, reason: "Flu", status: "pending" },
-    { id: "2", employeeName: "Diana Prince", leaveType: "Vacation", startDate: "2024-02-01", endDate: "2024-02-10", days: 10, reason: "Vacation", status: "pending" },
+    { id: "1", employeeName: "Charlie Brown", leaveType: "Sick Leave", startDate: "2026-01-10", endDate: "2026-01-12", days: 3, reason: "Flu", status: "pending" },
+    { id: "2", employeeName: "Diana Prince", leaveType: "Vacation", startDate: "2026-02-01", endDate: "2026-02-10", days: 10, reason: "Vacation", status: "pending" },
   ];
 };
 
 // Get upcoming deadlines
 export const getUpcomingDeadlines = async (_companyId: string, _days = 30): Promise<UpcomingDeadline[]> => {
   return [
-    { id: "1", projectName: "Project Alpha", taskName: "Frontend Setup", deadline: "2024-01-15", assignee: "John Doe", priority: "high", status: "on-track" },
-    { id: "2", projectName: "Project Beta", taskName: "Database Schema", deadline: "2024-01-20", assignee: "Bob Johnson", priority: "medium", status: "at-risk" },
+    { id: "1", projectName: "Project Alpha", taskName: "Frontend Setup", deadline: "2026-01-15", assignee: "John Doe", priority: "high", status: "on-track" },
+    { id: "2", projectName: "Project Beta", taskName: "Database Schema", deadline: "2026-01-20", assignee: "Bob Johnson", priority: "medium", status: "at-risk" },
   ];
 };
 
 // Get upcoming birthdays/anniversaries
 export const getUpcomingBirthdays = async (_userId: string): Promise<UpcomingBirthday[]> => {
   return [
-     { id: "1", employeeName: "John Doe", department: "Engineering", date: "2024-01-20", daysUntil: 5 },
+     { id: "1", employeeName: "John Doe", department: "Engineering", date: "2026-01-20", daysUntil: 5 },
   ];
 };
 

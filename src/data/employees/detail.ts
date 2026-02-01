@@ -56,11 +56,11 @@ export const attendanceStats: AttendanceStats = {
 }
 
 export const recentAttendance: RecentAttendance[] = [
-  { date: "2024-01-15", checkIn: "9:15 AM", checkOut: "6:30 PM", hours: "8h 15m", status: "present" },
-  { date: "2024-01-14", checkIn: "10:45 AM", checkOut: "7:00 PM", hours: "8h 15m", status: "late" },
-  { date: "2024-01-13", checkIn: "9:00 AM", checkOut: "6:15 PM", hours: "8h 15m", status: "present" },
-  { date: "2024-01-12", checkIn: "8:45 AM", checkOut: "6:00 PM", hours: "8h 15m", status: "present" },
-  { date: "2024-01-11", checkIn: "-", checkOut: "-", hours: "-", status: "absent" },
+  { date: "2026-01-15", checkIn: "9:15 AM", checkOut: "6:30 PM", hours: "8h 15m", status: "present" },
+  { date: "2026-01-14", checkIn: "10:45 AM", checkOut: "7:00 PM", hours: "8h 15m", status: "late" },
+  { date: "2026-01-13", checkIn: "9:00 AM", checkOut: "6:15 PM", hours: "8h 15m", status: "present" },
+  { date: "2026-01-12", checkIn: "8:45 AM", checkOut: "6:00 PM", hours: "8h 15m", status: "present" },
+  { date: "2026-01-11", checkIn: "-", checkOut: "-", hours: "-", status: "absent" },
 ]
 
 export const performanceMetrics: PerformanceMetric[] = [

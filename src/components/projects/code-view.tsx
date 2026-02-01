@@ -152,7 +152,7 @@ export function ProjectCodeView({ projectId }: { projectId: string }) {
           {repositories.map((repo) => (
             <div
               key={repo.name}
-              className="repo-item flex items-start justify-between p-4 border rounded-lg transition-colors cursor-pointer"
+              className="repo-item flex items-start justify-between p-4 border rounded-none transition-colors cursor-pointer"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">

@@ -335,7 +335,7 @@ export function PayrollManagement() {
                                 return (
                                     <div
                                         key={payrollId}
-                                        className="payroll-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors initial-animation"
+                                        className="payroll-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-none hover:bg-muted/50 transition-colors initial-animation"
                                     >
                                         <Link
                                             to={`/payroll/${payrollId}`}

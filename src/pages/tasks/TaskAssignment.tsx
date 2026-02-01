@@ -430,7 +430,7 @@ export function TaskAssginment() {
                                                 {getStatusLabel(task.status)}
                                             </Badge>
                                             <span
-                                                className={`text-xs px-2 py-1 rounded-md font-medium ${getPriorityColor(
+                                                className={`text-xs px-2 py-1 rounded-none font-medium ${getPriorityColor(
                                                     task.priority
                                                 )}`}
                                             >

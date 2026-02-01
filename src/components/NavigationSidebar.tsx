@@ -85,7 +85,7 @@ export function NavigationSidebar({
           )}
         >
           <Sidebar open={open} setOpen={setOpen}>
-            <SidebarBody className="justify-between gap-10 rounded-md fixed z-9999">
+            <SidebarBody className="justify-between gap-10 rounded-none fixed z-9999">
               <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto justify-between">
                 <div>
                   {open ? <Logo /> : <LogoIcon />}

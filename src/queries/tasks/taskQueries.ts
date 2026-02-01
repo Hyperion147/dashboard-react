@@ -11,9 +11,9 @@ export const dummyTask: Task = {
   description: "Initial setup",
   status: "in_progress",
   priority: "high",
-  due_date: "2024-02-01",
-  created_at: "2024-01-01",
-  updated_at: "2024-01-01",
+  due_date: "2026-02-01",
+  created_at: "2026-01-01",
+  updated_at: "2026-01-01",
   assigned_to: {
       id: "emp-001",
       first_name: "John",

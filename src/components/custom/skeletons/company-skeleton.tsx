@@ -21,7 +21,7 @@ export function CompanyPageSkeleton() {
         </div>
         
         {/* Action button */}
-        <Skeleton className="h-9 w-9 rounded-md" />
+        <Skeleton className="h-9 w-9 rounded-none" />
       </div>
 
       {/* Tabs Skeleton */}

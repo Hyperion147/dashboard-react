@@ -11,11 +11,11 @@ import type {
 const dummyPayroll: Payroll = {
     id: "payroll-001",
     company_id: "comp-001",
-    month: "2024-01",
+    month: "2026-01",
     status: "finalized",
     total_amount: 100000,
-    created_at: "2024-01-31",
-    updated_at: "2024-01-31",
+    created_at: "2026-01-31",
+    updated_at: "2026-01-31",
     payslips: []
 };
 
@@ -29,8 +29,8 @@ const dummyPayslip: Payslip = {
     deductions: 5000,
     net_salary: 75000,
     status: "paid",
-    created_at: "2024-01-31",
-    updated_at: "2024-01-31",
+    created_at: "2026-01-31",
+    updated_at: "2026-01-31",
     employee: {
         id: "emp-001",
         first_name: "John",

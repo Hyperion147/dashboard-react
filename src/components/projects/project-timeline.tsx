@@ -267,7 +267,7 @@ export function ProjectTimelineView({ projectId }: { projectId: string }) {
         </CardHeader>
         <CardContent className="space-y-3">
           {milestones.map((milestone, i) => (
-            <div key={i} className="milestone-item flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors">
+            <div key={i} className="milestone-item flex items-center justify-between p-3 border rounded-none cursor-pointer transition-colors">
               <div className="flex items-center gap-3">
                 <div className="milestone-icon">
                   {milestone.status === "completed" ? (

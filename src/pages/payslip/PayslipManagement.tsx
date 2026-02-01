@@ -162,7 +162,7 @@ export function PayslipManagement() {
               {filteredEmployees.map((employee) => (
                 <div
                   key={employee.id}
-                  className="employee-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors initial-animation"
+                  className="employee-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-none hover:bg-muted/50 transition-colors initial-animation"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">

@@ -84,7 +84,7 @@ export default function CreateCompanyPage() {
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm mt-1">
+                      <SelectTrigger className="w-full px-3 py-2 border border-input rounded-none bg-background text-sm mt-1">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -108,7 +108,7 @@ export default function CreateCompanyPage() {
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm mt-1">
+                      <SelectTrigger className="w-full px-3 py-2 border border-input rounded-none bg-background text-sm mt-1">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>

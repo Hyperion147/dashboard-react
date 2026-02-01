@@ -408,7 +408,7 @@ export function ProjectListView({ projectId }: { projectId: string }) {
                     <div className="mt-4 pt-4 border-t space-y-3">
                       <p className="text-sm font-semibold">Subtasks</p>
                       {[1, 2, 3].map((i) => (
-                        <div key={i} className="subtask-item flex items-center gap-3 text-sm p-2 rounded-md hover:bg-muted/50 transition-colors">
+                        <div key={i} className="subtask-item flex items-center gap-3 text-sm p-2 rounded-none hover:bg-muted/50 transition-colors">
                           <Checkbox className="task-checkbox" />
                           <span>Subtask {i}</span>
                         </div>

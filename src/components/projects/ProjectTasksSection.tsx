@@ -119,19 +119,19 @@ export function ProjectTasksSection({ projectId, companyId: _companyId }: Projec
       <CardContent className="space-y-4">
         {/* Task Stats */}
         <div className="grid grid-cols-4 gap-2">
-          <div className="text-center p-2 bg-muted rounded-md">
+          <div className="text-center p-2 bg-muted rounded-none">
             <p className="text-lg font-bold">{taskStats.total}</p>
             <p className="text-xs text-muted-foreground">Total</p>
           </div>
-          <div className="text-center p-2 bg-blue-50 rounded-md">
+          <div className="text-center p-2 bg-blue-50 rounded-none">
             <p className="text-lg font-bold text-blue-600">{taskStats.inProgress}</p>
             <p className="text-xs text-muted-foreground">In Progress</p>
           </div>
-          <div className="text-center p-2 bg-green-50 rounded-md">
+          <div className="text-center p-2 bg-green-50 rounded-none">
             <p className="text-lg font-bold text-green-600">{taskStats.completed}</p>
             <p className="text-xs text-muted-foreground">Completed</p>
           </div>
-          <div className="text-center p-2 bg-red-50 rounded-md">
+          <div className="text-center p-2 bg-red-50 rounded-none">
             <p className="text-lg font-bold text-red-600">{taskStats.blocked}</p>
             <p className="text-xs text-muted-foreground">Blocked</p>
           </div>

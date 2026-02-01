@@ -335,7 +335,7 @@ export function ProjectSummary({ projectId }: ProjectSummaryProps) {
         <CardContent>
           <div className="space-y-3">
             {teamMembers.map((member) => (
-              <div key={member.name} className="team-member flex items-center justify-between p-2 rounded-lg cursor-pointer">
+              <div key={member.name} className="team-member flex items-center justify-between p-2 rounded-none cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="team-avatar w-8 h-8 bg-accent rounded-full flex items-center justify-center text-xs font-medium">
                     {member.avatar}

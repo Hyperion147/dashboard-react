@@ -603,7 +603,7 @@ export function EmployeeDetail({
           <Button
             variant="ghost"
             size="icon"
-            className="border rounded-xl shadow-sm"
+            className="border rounded-none shadow-sm"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -741,7 +741,7 @@ export function EmployeeDetail({
                 {recentAttendance.map((record, index) => (
                   <div
                     key={index}
-                    className="attendance-record flex items-center justify-between py-2 border-b last:border-b-0 cursor-pointer rounded-lg px-2"
+                    className="attendance-record flex items-center justify-between py-2 border-b last:border-b-0 cursor-pointer rounded-none px-2"
                   >
                     <div className="flex items-center gap-4">
                       <div className="status-icon flex items-center justify-center w-8 h-8">

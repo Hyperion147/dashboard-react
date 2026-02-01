@@ -289,7 +289,7 @@ export function TeamDetail() {
                   {employees.map((employee: any) => (
                     <div
                       key={employee.id}
-                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                      className="flex items-center justify-between p-3 border rounded-none hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <Avatar>
@@ -384,7 +384,7 @@ export function TeamDetail() {
                   {projects.map((project: any) => (
                     <div
                       key={project.id}
-                      className="flex items-start justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                      className="flex items-start justify-between p-3 border rounded-none hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-start gap-3 flex-1">
                         <FolderKanban className="w-5 h-5 text-primary mt-0.5" />

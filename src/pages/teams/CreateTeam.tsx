@@ -102,7 +102,7 @@ export function CreateTeam() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-lg">
+          <div className="p-2 bg-primary/10 rounded-none">
             <Users className="w-6 h-6 text-primary" />
           </div>
           <div>
