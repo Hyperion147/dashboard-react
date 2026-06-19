@@ -54,7 +54,7 @@ const Profile = () => {
                 </Avatar>
                 <div className="flex justify-between w-full items-center">
                     <div>
-                        <a href="https://suryansu.pro" target="_blank" className="font-bold">Suryansu.pro</a>
+                        <a href="https://suryansu.in" target="_blank" className="font-bold">Suryansu.in</a>
                         <p className="text-xs tracking-wider">Developer</p>
                     </div>
                     <Button
